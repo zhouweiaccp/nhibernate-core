@@ -1696,8 +1696,9 @@ namespace NHibernate.Impl
 			}
 		}
 
-		public override void List(CriteriaImpl criteria, IList results)
+		public override IList<T> List<T>(CriteriaImpl criteria)
 		{
+			var results = new List<T>();
 			using (BeginProcess())
 			{
 				string[] implementors = Factory.GetImplementors(criteria.EntityOrClassName);
@@ -1747,6 +1748,13 @@ namespace NHibernate.Impl
 					}
 				}
 			}
+			return results;
+		}
+
+		//TODO 6.0: Remove (use base class implementation)
+		public override void List(CriteriaImpl criteria, IList results)
+		{
+			ArrayHelper.AddAll(results, List(criteria));
 		}
 
 		public bool Contains(object obj)
