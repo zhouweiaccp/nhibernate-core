@@ -27,6 +27,8 @@ namespace NHibernate
 		/// </summary>
 		/// <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
 		/// <returns></returns>
+		//Since 5.3
+		[Obsolete("Please use the generic overload instead.")]
 		Task<IList> ListAsync(CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <summary>
@@ -47,6 +49,8 @@ namespace NHibernate
 		/// </summary>
 		/// <param name="results">The list to fill with the results.</param>
 		/// <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
+		//Since 5.3
+		[Obsolete("Please use the generic overload yielding a list instead.")]
 		Task ListAsync(IList results, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <summary>

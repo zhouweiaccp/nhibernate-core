@@ -1176,7 +1176,8 @@ namespace NHibernate.Impl
 			}
 		}
 
-		//TODO 6.0: Remove (use base class implementation)
+		//Since 5.3
+		[Obsolete("Please use the generic overload yielding a list instead.")]
 		public override async Task ListAsync(CriteriaImpl criteria, IList results, CancellationToken cancellationToken)
 		{
 			cancellationToken.ThrowIfCancellationRequested();

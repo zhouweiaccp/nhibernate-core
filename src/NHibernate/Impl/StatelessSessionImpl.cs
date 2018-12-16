@@ -174,7 +174,8 @@ namespace NHibernate.Impl
 			}
 		}
 
-		//TODO 6.0: Remove (use base class implementation)
+		//Since 5.3
+		[Obsolete("Please use the generic overload yielding a list instead.")]
 		public override void List(CriteriaImpl criteria, IList results)
 		{
 			ArrayHelper.AddAll(results, List(criteria));

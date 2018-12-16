@@ -26,12 +26,16 @@ namespace NHibernate.Impl
 	public partial class CriteriaImpl : ICriteria, ISupportEntityJoinCriteria, ISupportSelectModeCriteria
 	{
 
+		//Since 5.3
+		[Obsolete("Please use the generic overload instead.")]
 		public async Task<IList> ListAsync(CancellationToken cancellationToken = default(CancellationToken))
 		{
 			cancellationToken.ThrowIfCancellationRequested();
 			return (await (ListAsync<object>(cancellationToken)).ConfigureAwait(false)).ToIList();
 		}
 
+		//Since 5.3
+		[Obsolete("Please use the generic overload yielding a list instead.")]
 		public async Task ListAsync(IList results, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			cancellationToken.ThrowIfCancellationRequested();
@@ -69,11 +73,13 @@ namespace NHibernate.Impl
 		public async Task<object> UniqueResultAsync(CancellationToken cancellationToken = default(CancellationToken))
 		{
 			cancellationToken.ThrowIfCancellationRequested();
-			return AbstractQueryImpl.UniqueElement(await (ListAsync(cancellationToken)).ConfigureAwait(false));
+			return AbstractQueryImpl.UniqueElement(await (ListAsync<object>(cancellationToken)).ConfigureAwait(false));
 		}
 		public sealed partial class Subcriteria : ICriteria, ISupportSelectModeCriteria
 		{
 
+			//Since 5.3
+			[Obsolete("Please use the generic overload instead.")]
 			public Task<IList> ListAsync(CancellationToken cancellationToken = default(CancellationToken))
 			{
 				if (cancellationToken.IsCancellationRequested)
@@ -83,6 +89,8 @@ namespace NHibernate.Impl
 				return root.ListAsync(cancellationToken);
 			}
 
+			//Since 5.3
+			[Obsolete("Please use the generic overload yielding a list instead.")]
 			public Task ListAsync(IList results, CancellationToken cancellationToken = default(CancellationToken))
 			{
 				if (cancellationToken.IsCancellationRequested)

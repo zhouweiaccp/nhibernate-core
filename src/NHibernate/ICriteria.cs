@@ -288,6 +288,8 @@ namespace NHibernate
 		/// Get the results
 		/// </summary>
 		/// <returns></returns>
+		//Since 5.3
+		[Obsolete("Please use the generic overload instead.")]
 		IList List();
 
 		/// <summary>
@@ -354,6 +356,8 @@ namespace NHibernate
 		/// Get the results and fill the <see cref="IList"/>
 		/// </summary>
 		/// <param name="results">The list to fill with the results.</param>
+		//Since 5.3
+		[Obsolete("Please use the generic overload yielding a list instead.")]
 		void List(IList results);
 
 		/// <summary>
