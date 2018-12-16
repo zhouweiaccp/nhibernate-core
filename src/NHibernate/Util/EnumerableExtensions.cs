@@ -5,7 +5,8 @@ using System.Linq;
 
 namespace NHibernate.Util
 {
-	//TODO 6.0: Make internal
+	//Since v5.1
+	[Obsolete("This class has no more usages and will be removed in next major version.")]
 	public static class EnumerableExtensions
 	{
 		//Since v5.1
@@ -39,6 +40,8 @@ namespace NHibernate.Util
 			}
 		}
 
+		//Since 5.3. Added temporarily to implement obsolete methods.
+		[Obsolete]
 		internal static IList ToIList<T>(this IEnumerable<T> list)
 		{
 			return list as IList ?? list.ToList();

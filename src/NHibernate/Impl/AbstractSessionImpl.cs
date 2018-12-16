@@ -156,17 +156,19 @@ namespace NHibernate.Impl
 			using (BeginProcess())
 			{
 				var results = new List<T>();
+#pragma warning disable CS0618 // Type or member is obsolete
 				List(criteria, results);
+#pragma warning restore CS0618 // Type or member is obsolete
 				return results;
 			}
 		}
 
-		//TODO 6.0: Make virtual
+		//Since 5.3
+		[Obsolete("Please use the generic overload yielding a list instead.")]
 		public abstract void List(CriteriaImpl criteria, IList results);
-		//{
-		//	ArrayHelper.AddAll(results, List(criteria));
-		//}
 
+		//Since 5.3
+		[Obsolete("Please use the generic overload instead.")]
 		public virtual IList List(CriteriaImpl criteria)
 		{
 			return List<object>(criteria).ToIList();

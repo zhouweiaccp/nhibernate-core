@@ -952,10 +952,10 @@ namespace NHibernate.Impl
 
 		public object UniqueResult()
 		{
-			return UniqueElement(List());
+			return UniqueElement(List<object>());
 		}
 
-		internal static object UniqueElement(IList list)
+		internal static object UniqueElement(IList<object> list)
 		{
 			int size = list.Count;
 			if (size == 0)
