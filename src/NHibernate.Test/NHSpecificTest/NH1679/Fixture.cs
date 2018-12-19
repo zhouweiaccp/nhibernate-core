@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using NHibernate.Criterion;
+﻿using NHibernate.Criterion;
 using NUnit.Framework;
 
 namespace NHibernate.Test.NHSpecificTest.NH1679
@@ -50,8 +49,8 @@ namespace NHibernate.Test.NHSpecificTest.NH1679
 				DetachedCriteria criteria = DetachedCriteria.For<DomainClass>("alias");
 				
 				action.Invoke(criteria);
-				
-				IList  l = criteria.GetExecutableCriteria(session).List();
+
+				var l = criteria.GetExecutableCriteria(session).List<DomainClass>();
 				Assert.AreNotEqual(l, null);
 			}
 		}

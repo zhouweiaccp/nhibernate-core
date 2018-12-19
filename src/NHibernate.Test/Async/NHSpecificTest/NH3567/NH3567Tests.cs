@@ -86,7 +86,7 @@ namespace NHibernate.Test.NHSpecificTest.NH3567
 					var numberOfComments =
 						(await (session.CreateCriteria(typeof(Comment))
 							.Add(Subqueries.PropertyIn("Post.Id", subquery))
-							.ListAsync())).Count;
+							.ListAsync<Comment>())).Count;
 					Assert.That(numberOfComments, Is.EqualTo(2), "Query with sub-query returned an invalid number of rows.");
 
 					var site = await (session.GetAsync<Site>(1));
@@ -99,7 +99,7 @@ namespace NHibernate.Test.NHSpecificTest.NH3567
 					numberOfComments =
 						(await (session.CreateCriteria(typeof(Comment))
 							.Add(Subqueries.PropertyIn("Post.Id", subquery))
-							.ListAsync())).Count;
+							.ListAsync<Comment>())).Count;
 
 					Assert.That(numberOfComments, Is.EqualTo(2), "Query with sub-query returned an invalid number of rows.");
 

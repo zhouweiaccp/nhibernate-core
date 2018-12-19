@@ -46,8 +46,8 @@ namespace NHibernate.Test.Events.Collections
 			{
 				using (ITransaction tx = s.BeginTransaction())
 				{
-					IList children = s.CreateCriteria(dummyChild.GetType()).List();
-					IList parents = s.CreateCriteria(dummyParent.GetType()).List();
+					var children = s.CreateCriteria(dummyChild.GetType()).List<IChild>();
+					var parents = s.CreateCriteria(dummyParent.GetType()).List<IParentWithCollection>();
 					foreach (IParentWithCollection parent in parents)
 					{
 						parent.ClearChildren();

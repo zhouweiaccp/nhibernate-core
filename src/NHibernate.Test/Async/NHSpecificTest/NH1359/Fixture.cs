@@ -8,10 +8,7 @@
 //------------------------------------------------------------------------------
 
 
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 using NHibernate.Criterion;
 using NHibernate.Transform;
 using NUnit.Framework;
@@ -78,9 +75,9 @@ namespace NHibernate.Test.NHSpecificTest.NH1359
 					.SetProjection(Projections.SubQuery(dc))
 					.Add(Expression.Eq("Name", "Fred"));
 
-				IList list = await (c.ListAsync());
+				var list = await (c.ListAsync<int>());
 				Assert.AreEqual(2, list.Count);
-				foreach(object item in list)
+				foreach(var item in list)
 				{
 					Assert.AreEqual(5, item);
 				}
@@ -199,7 +196,7 @@ namespace NHibernate.Test.NHSpecificTest.NH1359
 									.Add(Restrictions.Eq("Name", "Joe"));
 				c.AddOrder(new Order("NameSubquery", true));
 				c.SetMaxResults(1);
-				IList list = await (c.ListAsync());
+				var list = await (c.ListAsync<string>());
 				Assert.AreEqual(1, list.Count);
 			}
 		}

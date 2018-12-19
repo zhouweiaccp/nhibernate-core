@@ -71,7 +71,7 @@ namespace NHibernate.Test.NHSpecificTest.NH276
 
 			ICriteria c = s.CreateCriteria(typeof(Office));
 			c.Add(Expression.Eq("Location.Id", madison.Id));
-			IList results = await (c.ListAsync());
+			var results = await (c.ListAsync<Office>());
 
 			Assert.AreEqual(2, results.Count, "2 objects");
 			foreach (Office office in results)
@@ -81,7 +81,7 @@ namespace NHibernate.Test.NHSpecificTest.NH276
 
 			c = s.CreateCriteria(typeof(Office));
 			c.Add(Expression.Eq("Location.Id", college.Id));
-			results = await (c.ListAsync());
+			results = await (c.ListAsync<Office>());
 
 			Assert.AreEqual(1, results.Count, "1 objects");
 			foreach (Office office in results)

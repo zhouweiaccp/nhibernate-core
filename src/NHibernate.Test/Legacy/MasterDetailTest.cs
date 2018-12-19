@@ -1275,7 +1275,7 @@ namespace NHibernate.Test.Legacy
 			b.String = "asdfasdf";
 			s.Save(f);
 			s.Save(b);
-			IList list = s.CreateCriteria(typeof(object)).List();
+			var list = s.CreateCriteria(typeof(object)).List<object>();
 			Assert.AreEqual(2, list.Count);
 			Assert.IsTrue(list.Contains(f));
 			Assert.IsTrue(list.Contains(b));

@@ -37,6 +37,7 @@ namespace NHibernate.Test.EntityModeTest.Map.Basic
 
 		public delegate IDictionary SingleCarQueryDelegate(ISession session);
 		public delegate IList AllModelQueryDelegate(ISession session);
+		public delegate IList<IDictionary<string, object>> TypedAllModelQueryDelegate(ISession session);
 
 		[Test]
 		public async Task ShouldWorkWithHQLAsync()
@@ -51,10 +52,20 @@ namespace NHibernate.Test.EntityModeTest.Map.Basic
 		{
 			await (TestLazyDynamicClassAsync(
 				s => (IDictionary) s.CreateCriteria("ProductLine").AddOrder(Order.Asc("Description")).UniqueResult(),
-				s => s.CreateCriteria("Model").List()));
+				s => s.CreateCriteria("Model").List<IDictionary<string, object>>()));
 		}
 
-		public async Task TestLazyDynamicClassAsync(SingleCarQueryDelegate singleCarQueryHandler, AllModelQueryDelegate allModelQueryHandler, CancellationToken cancellationToken = default(CancellationToken))
+		public Task TestLazyDynamicClassAsync(
+			SingleCarQueryDelegate singleCarQueryHandler,
+			AllModelQueryDelegate allModelQueryHandler, CancellationToken cancellationToken = default(CancellationToken))
+		{
+			return TestLazyDynamicClassAsync(
+				singleCarQueryHandler,
+				s => (IList<IDictionary<string, object>>) allModelQueryHandler(s)
+				                                          .Cast<IDictionary<string, object>>().ToList(), cancellationToken);
+		}
+
+		public async Task TestLazyDynamicClassAsync(SingleCarQueryDelegate singleCarQueryHandler, TypedAllModelQueryDelegate allModelQueryHandler, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			ITransaction t;
 			IDictionary cars;
@@ -93,12 +104,12 @@ namespace NHibernate.Test.EntityModeTest.Map.Basic
 				Assert.AreEqual(2, models.Count);
 				Assert.IsTrue(NHibernateUtil.IsInitialized(models));
 				s.Clear();
-				IList list = allModelQueryHandler(s);
-				foreach (IDictionary ht in list)
+				var list = allModelQueryHandler(s);
+				foreach (var ht in list)
 				{
 					Assert.IsFalse(NHibernateUtil.IsInitialized(ht["ProductLine"]));
 				}
-				var model = (IDictionary)list[0];
+				var model = list[0];
 				Assert.IsTrue(((IList)((IDictionary)model["ProductLine"])["Models"]).Contains(model));
 				s.Clear();
 

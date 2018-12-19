@@ -88,7 +88,7 @@ namespace NHibernate.Test.Legacy
 
 				int none = (await (s.CreateCriteria(typeof(Fum))
 					.Add(Expression.In("FumString", Array.Empty<string>()))
-					.ListAsync())).Count;
+					.ListAsync<Fum>())).Count;
 				Assert.AreEqual(0, none);
 
 				await (s.DeleteAsync(b));
@@ -123,7 +123,7 @@ namespace NHibernate.Test.Legacy
 					.Add(Expression.IsNotNull("FumString"));
 				baseCriteria.CreateCriteria("Friends")
 					.Add(Expression.Like("FumString", "g%"));
-				IList list = await (baseCriteria.ListAsync());
+				var list = await (baseCriteria.ListAsync<Fum>());
 
 				Assert.AreEqual(1, list.Count);
 				Assert.AreSame(fum, list[0]);
@@ -148,7 +148,7 @@ namespace NHibernate.Test.Legacy
 					.Fetch("Friends");
 				baseCriteria.CreateCriteria("Fo", "fo")
 					.Add(Expression.Eq("FumString", fum.Fo.FumString));
-				map = (IDictionary) (await (baseCriteria.ListAsync()))[0];
+				map = (await (baseCriteria.ListAsync<IDictionary>()))[0];
 
 				Assert.AreSame(fum, map["this"]);
 				Assert.AreSame(fum.Fo, map["fo"]);
@@ -162,7 +162,7 @@ namespace NHibernate.Test.Legacy
 					.Add(Expression.IsNotNull("fo.FumString"))
 					.Add(Expression.Like("fr.FumString", "g%"))
 					.Add(Expression.EqProperty("fr.id.Short", "id.Short"))
-					.ListAsync());
+					.ListAsync<Fum>());
 				Assert.AreEqual(1, list.Count);
 				Assert.AreSame(fum, list[0]);
 				await (txn.CommitAsync());
@@ -177,7 +177,7 @@ namespace NHibernate.Test.Legacy
 					.Add(Expression.IsNotNull("FumString"));
 				baseCriteria.CreateCriteria("Friends")
 					.Add(Expression.Like("FumString", "g%"));
-				Fum fum = (Fum) (await (baseCriteria.ListAsync()))[0];
+				Fum fum = (await (baseCriteria.ListAsync<Fum>()))[0];
 				Assert.AreEqual(2, fum.Friends.Count);
 				await (s.DeleteAsync(fum));
 				await (s.DeleteAsync(fum.Fo));

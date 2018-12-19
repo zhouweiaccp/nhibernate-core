@@ -10,12 +10,8 @@
 
 namespace NHibernate.Test.NHSpecificTest.LoadingNullEntityInSet
 {
-	using System.Collections;
-	using Mapping;
 	using NUnit.Framework;
 	using SqlCommand;
-	using Type;
-	using TestCase=NHibernate.Test.TestCase;
 	using System.Threading.Tasks;
 
 	[TestFixture]
@@ -81,7 +77,7 @@ namespace NHibernate.Test.NHSpecificTest.LoadingNullEntityInSet
             	ICriteria criteria = sess.CreateCriteria(typeof(Employee));
             	criteria.CreateCriteria("Primaries", JoinType.LeftOuterJoin);
 				criteria.CreateCriteria("Secondaries", JoinType.LeftOuterJoin);
-            	await (criteria.ListAsync());
+            	await (criteria.ListAsync<Employee>());
             }
 
 

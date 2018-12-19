@@ -248,7 +248,7 @@ namespace NHibernate.Test.Component.Basic
 				await (s.CreateQuery("from User u where u.Person.Yob = 1999").ListAsync());
 				await (s.CreateCriteria(typeof(User))
 					.Add(Property.ForName("Person.Yob").Between(1999, 2002))
-					.ListAsync());
+					.ListAsync<User>());
 				
 				if (Dialect.SupportsRowValueConstructorSyntax) 
 				{

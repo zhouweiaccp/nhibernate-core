@@ -227,11 +227,11 @@ namespace NHibernate.Test.Legacy
 				.Add(Expression.Eq("String", "a string"))
 				.SetLockMode(lockMode);
 
-			IList list = crit.List();
+			var list = crit.List<Baz>();
 			Assert.AreEqual(2, list.Count);
 
-			s.CreateCriteria(typeof(Glarch)).SetLockMode(LockMode.Upgrade).List();
-			s.CreateCriteria(typeof(Glarch)).SetLockMode(CriteriaSpecification.RootAlias, LockMode.Upgrade).List();
+			s.CreateCriteria(typeof(Glarch)).SetLockMode(LockMode.Upgrade).List<Glarch>();
+			s.CreateCriteria(typeof(Glarch)).SetLockMode(CriteriaSpecification.RootAlias, LockMode.Upgrade).List<Glarch>();
 
 			g2.Name = null;
 			t.Commit();
@@ -246,7 +246,7 @@ namespace NHibernate.Test.Legacy
 				.Add(Expression.Gt("X", -666));
 			crit.CreateCriteria("FooSet")
 				.Add(Expression.IsNull("Null"));
-			list = crit.List();
+			list = crit.List<Baz>();
 
 			Assert.AreEqual(4, list.Count);
 			baz = (Baz) crit.UniqueResult();
@@ -264,7 +264,7 @@ namespace NHibernate.Test.Legacy
 				.CreateCriteria("TheFoo")
 				.CreateCriteria("Component.Glarch")
 				.Add(Expression.Eq("Name", "xxx"))
-				.List();
+				.List<Baz>();
 			Assert.AreEqual(0, list.Count);
 
 			list = s.CreateCriteria(typeof(Baz))
@@ -274,7 +274,7 @@ namespace NHibernate.Test.Legacy
 				.Add(Expression.IsNull("foo2.Component.Glarch"))
 				.CreateCriteria("foo2.Component.Glarch")
 				.Add(Expression.Eq("Name", "xxx"))
-				.List();
+				.List<Baz>();
 			Assert.AreEqual(0, list.Count);
 
 			t.Commit();
@@ -289,7 +289,7 @@ namespace NHibernate.Test.Legacy
 			crit.CreateCriteria("FooSet")
 				.Add(Expression.IsNull("Null"));
 
-			list = crit.List();
+			list = crit.List<Baz>();
 			Assert.AreEqual(2, list.Count);
 			baz = (Baz) crit.UniqueResult();
 			Assert.IsTrue(NHibernateUtil.IsInitialized(baz.TopGlarchez)); //cos it is nonlazy
@@ -324,12 +324,12 @@ namespace NHibernate.Test.Legacy
 
 			s = OpenSession();
 			t = s.BeginTransaction();
-			Assert.AreEqual(1, s.CreateCriteria(typeof(Part)).List().Count);
+			Assert.AreEqual(1, s.CreateCriteria(typeof(Part)).List<Part>().Count);
 			//there is a where condition on Part mapping
 			Assert.AreEqual(1,
 			                s.CreateCriteria(typeof(Part))
 			                	.Add(Expression.Eq("Id", p1.Id))
-			                	.List().Count);
+			                	.List<Part>().Count);
 			Assert.AreEqual(1, s.CreateQuery("from Part").List().Count);
 			Assert.AreEqual(2, s.CreateQuery("from Baz baz join baz.Parts").List().Count);
 

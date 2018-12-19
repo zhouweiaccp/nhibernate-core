@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 
 using NUnit.Framework;
 
@@ -25,7 +24,7 @@ namespace NHibernate.Test.NHSpecificTest.NH940
 
 			using (ISession s = OpenSession())
 			{
-				IList l = s.CreateCriteria(typeof(A)).List();
+				var l = s.CreateCriteria(typeof(A)).List<A>();
 				try
 				{
 					((A)l[0]).Execute();

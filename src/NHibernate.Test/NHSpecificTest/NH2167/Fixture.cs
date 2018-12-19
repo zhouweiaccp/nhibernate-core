@@ -77,7 +77,7 @@ namespace NHibernate.Test.NHSpecificTest.NH2167
 							Projections.Constant(0),
 							Projections.Constant(1))));
 
-				projection.List();
+				projection.List<string>();
 			}
 		}
 	}

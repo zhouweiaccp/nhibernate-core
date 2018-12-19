@@ -9,7 +9,6 @@
 
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using NHibernate.Criterion;
 using NHibernate.DomainModel.NHSpecific;
@@ -68,7 +67,7 @@ namespace NHibernate.Test.NHSpecificTest
 				ICriteria chiefsCriteria = s.CreateCriteria(typeof(Team));
 				chiefsCriteria.Add(Expression.Eq("Name", "Chiefs"));
 
-				Team chiefs = (Team) (await (chiefsCriteria.ListAsync()))[0];
+				Team chiefs = (await (chiefsCriteria.ListAsync<Team>()))[0];
 				IList<Child> players = chiefs.Players;
 
 				Parent parentDad = (Parent) await (s.LoadAsync(typeof(Parent), 1));

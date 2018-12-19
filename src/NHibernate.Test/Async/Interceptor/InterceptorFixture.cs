@@ -179,7 +179,7 @@ namespace NHibernate.Test.Interceptor
 
 			s = OpenSession();
 			t = s.BeginTransaction();
-			IList logs = await (s.CreateCriteria(typeof(Log)).ListAsync());
+			var logs = await (s.CreateCriteria(typeof(Log)).ListAsync<Log>());
 			Assert.AreEqual(2, logs.Count);
 			await (s.DeleteAsync(u));
 			await (s.DeleteAsync("from Log"));

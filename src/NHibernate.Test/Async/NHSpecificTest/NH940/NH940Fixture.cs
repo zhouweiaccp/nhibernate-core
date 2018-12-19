@@ -9,7 +9,6 @@
 
 
 using System;
-using System.Collections;
 
 using NUnit.Framework;
 
@@ -36,7 +35,7 @@ namespace NHibernate.Test.NHSpecificTest.NH940
 
 			using (ISession s = OpenSession())
 			{
-				IList l = await (s.CreateCriteria(typeof(A)).ListAsync());
+				var l = await (s.CreateCriteria(typeof(A)).ListAsync<A>());
 				try
 				{
 					((A)l[0]).Execute();

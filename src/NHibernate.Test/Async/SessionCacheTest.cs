@@ -9,7 +9,6 @@
 
 
 using System;
-using System.Collections;
 using NHibernate.DomainModel;
 using NUnit.Framework;
 
@@ -44,7 +43,7 @@ namespace NHibernate.Test
 
 			await (fixture.FlushAsync());
 
-			IList list = await (fixture.CreateCriteria(typeof(Simple)).ListAsync());
+			var list = await (fixture.CreateCriteria(typeof(Simple)).ListAsync<Simple>());
 
 			Assert.IsNotNull(list);
 			Assert.IsTrue(list.Count == 5);

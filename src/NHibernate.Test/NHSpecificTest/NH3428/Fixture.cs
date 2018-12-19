@@ -55,7 +55,7 @@ namespace NHibernate.Test.NHSpecificTest.NH3428
 				criteria.SetFirstResult(1).SetMaxResults(1);
 				criteria.AddOrder(Order.Asc("Name"));
 
-				var result = criteria.List();
+				var result = criteria.List<string>();
 
 				Assert.AreEqual(1, result.Count);
 				Assert.AreEqual("Sally", result[0]);

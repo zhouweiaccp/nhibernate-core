@@ -93,10 +93,10 @@ namespace NHibernate.Test.Legacy
 
 			using (ISession s = OpenSession())
 			{
-				IList results = s.CreateCriteria(typeof(Simple))
+				var results = s.CreateCriteria(typeof(Simple))
 					.Add(Expression.Gt("Date", new DateTime(2005, 01, 01)))
 					.AddOrder(Order.Asc("Date"))
-					.List();
+					.List<Simple>();
 
 				Assert.AreEqual(1, results.Count, "one gt from 2005");
 				Simple simple = (Simple) results[0];
@@ -105,7 +105,7 @@ namespace NHibernate.Test.Legacy
 				results = s.CreateCriteria(typeof(Simple))
 					.Add(Expression.Lt("Date", new DateTime(2005, 01, 01)))
 					.AddOrder(Order.Asc("Date"))
-					.List();
+					.List<Simple>();
 
 				Assert.AreEqual(1, results.Count, "one lt than 2005");
 				simple = (Simple) results[0];
@@ -123,7 +123,7 @@ namespace NHibernate.Test.Legacy
 			{
 				Assert.Throws<QueryException>(() =>s.CreateCriteria(typeof(Master))
 					.Add(Expression.Like("Details", "SomeString"))
-					.List());
+					.List<Master>());
 			}
 		}
 
@@ -136,7 +136,7 @@ namespace NHibernate.Test.Legacy
 				s.Save(master);
 				s.CreateCriteria(typeof(Detail))
 					.Add(Expression.Eq("Master", master))
-					.List();
+					.List<Detail>();
 				s.Delete(master);
 				s.Flush();
 			}
@@ -149,7 +149,7 @@ namespace NHibernate.Test.Legacy
 			{
 				Assert.Throws<QueryException>(() =>s.CreateCriteria(typeof(Master))
 					.Add(Expression.Eq("Details.I", 10))
-					.List());
+					.List<Master>());
 			}
 		}
 
@@ -163,7 +163,7 @@ namespace NHibernate.Test.Legacy
 				Assert.AreEqual(1, s.CreateCriteria(typeof(Master))
 				                   	.CreateAlias("Details", "detail", JoinType.LeftOuterJoin)
 				                   	.Fetch("Details")
-				                   	.List().Count);
+				                   	.List<Master>().Count);
 				s.Delete("from Master");
 				s.Flush();
 			}

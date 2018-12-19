@@ -8,7 +8,6 @@
 //------------------------------------------------------------------------------
 
 
-using System.Collections;
 using NHibernate.Criterion;
 using NUnit.Framework;
 
@@ -62,8 +61,8 @@ namespace NHibernate.Test.NHSpecificTest.NH1679
 				DetachedCriteria criteria = DetachedCriteria.For<DomainClass>("alias");
 				
 				action.Invoke(criteria);
-				
-				IList  l = await (criteria.GetExecutableCriteria(session).ListAsync(cancellationToken));
+
+				var l = await (criteria.GetExecutableCriteria(session).ListAsync<DomainClass>(cancellationToken));
 				Assert.AreNotEqual(l, null);
 			}
 		}

@@ -1,4 +1,3 @@
-using System.Collections;
 using NUnit.Framework;
 
 namespace NHibernate.Test.NHSpecificTest.NH734
@@ -17,7 +16,7 @@ namespace NHibernate.Test.NHSpecificTest.NH734
 				try
 				{
 					session.BeginTransaction();
-					IList result = criteria.List();
+					criteria.List<MyClass>();
 					session.Transaction.Commit();
 				}
 				catch

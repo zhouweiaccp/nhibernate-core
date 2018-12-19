@@ -105,23 +105,23 @@ namespace NHibernate.Test.NHSpecificTest.NH247
 				ICriteria c;
 				c = s.CreateCriteria(typeof(LiteralDescription));
 				c.Add(new InsensitiveLikeExpression("Description", "DeScripTion%"));
-				Assert.AreEqual(2, (await (c.ListAsync())).Count);
+				Assert.AreEqual(2, (await (c.ListAsync<LiteralDescription>())).Count);
 
 				c = s.CreateCriteria(typeof(LiteralDescription));
 				c.Add(Expression.InsensitiveLike("Description", "DeScripTion", MatchMode.Start));
-				Assert.AreEqual(2, (await (c.ListAsync())).Count);
+				Assert.AreEqual(2, (await (c.ListAsync<LiteralDescription>())).Count);
 
 				c = s.CreateCriteria(typeof(LiteralDescription));
 				c.Add(Expression.InsensitiveLike("Description", "DeScripTion", MatchMode.Anywhere));
-				Assert.AreEqual(4, (await (c.ListAsync())).Count);
+				Assert.AreEqual(4, (await (c.ListAsync<LiteralDescription>())).Count);
 
 				c = s.CreateCriteria(typeof(LiteralDescription));
 				c.Add(Expression.InsensitiveLike("Description", "tHeeND", MatchMode.End));
-				Assert.AreEqual(1, (await (c.ListAsync())).Count);
+				Assert.AreEqual(1, (await (c.ListAsync<LiteralDescription>())).Count);
 
 				c = s.CreateCriteria(typeof(LiteralDescription));
 				c.Add(Expression.InsensitiveLike("Description", "DescRiptioN TheEnd", MatchMode.Exact));
-				Assert.AreEqual(1, (await (c.ListAsync())).Count);
+				Assert.AreEqual(1, (await (c.ListAsync<LiteralDescription>())).Count);
 			}
 		}
 	}

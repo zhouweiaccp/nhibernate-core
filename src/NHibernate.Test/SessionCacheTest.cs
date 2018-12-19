@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using NHibernate.DomainModel;
 using NUnit.Framework;
 
@@ -33,7 +32,7 @@ namespace NHibernate.Test
 
 			fixture.Flush();
 
-			IList list = fixture.CreateCriteria(typeof(Simple)).List();
+			var list = fixture.CreateCriteria(typeof(Simple)).List<Simple>();
 
 			Assert.IsNotNull(list);
 			Assert.IsTrue(list.Count == 5);

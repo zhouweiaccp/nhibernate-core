@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using NHibernate.Dialect;
 using NUnit.Framework;
 
@@ -54,19 +52,16 @@ namespace NHibernate.Test.NHSpecificTest.NH623
 		[Test]
 		public void WhereAttributesOnBags()
 		{
-			IList result;
-			Document d;
-
-			result = session.CreateCriteria(typeof(Document)).List();
-			d = result[0] as Document;
+			var result = session.CreateCriteria(typeof(Document)).List<Document>();
+			var d = result[0];
 
 			// collection is lazy loaded an so it is also filtered so we will get here one element
 			Assert.AreEqual(1, d.Pages.Count);
 
 			session.Clear();
 
-			result = session.CreateCriteria(typeof(Document)).Fetch("Pages").List();
-			d = result[0] as Document;
+			result = session.CreateCriteria(typeof(Document)).Fetch("Pages").List<Document>();
+			d = result[0];
 
 			// this assertion fails because if the collection is eager fetched it will contain all elements and will ignore the where clause.
 			Assert.AreEqual(1, d.Pages.Count);

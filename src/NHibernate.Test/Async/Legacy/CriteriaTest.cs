@@ -104,10 +104,10 @@ namespace NHibernate.Test.Legacy
 
 			using (ISession s = OpenSession())
 			{
-				IList results = await (s.CreateCriteria(typeof(Simple))
+				var results = await (s.CreateCriteria(typeof(Simple))
 					.Add(Expression.Gt("Date", new DateTime(2005, 01, 01)))
 					.AddOrder(Order.Asc("Date"))
-					.ListAsync());
+					.ListAsync<Simple>());
 
 				Assert.AreEqual(1, results.Count, "one gt from 2005");
 				Simple simple = (Simple) results[0];
@@ -116,7 +116,7 @@ namespace NHibernate.Test.Legacy
 				results = await (s.CreateCriteria(typeof(Simple))
 					.Add(Expression.Lt("Date", new DateTime(2005, 01, 01)))
 					.AddOrder(Order.Asc("Date"))
-					.ListAsync());
+					.ListAsync<Simple>());
 
 				Assert.AreEqual(1, results.Count, "one lt than 2005");
 				simple = (Simple) results[0];
@@ -134,7 +134,7 @@ namespace NHibernate.Test.Legacy
 			{
 				Assert.ThrowsAsync<QueryException>(() =>s.CreateCriteria(typeof(Master))
 					.Add(Expression.Like("Details", "SomeString"))
-					.ListAsync());
+					.ListAsync<Master>());
 			}
 		}
 
@@ -147,7 +147,7 @@ namespace NHibernate.Test.Legacy
 				await (s.SaveAsync(master));
 				await (s.CreateCriteria(typeof(Detail))
 					.Add(Expression.Eq("Master", master))
-					.ListAsync());
+					.ListAsync<Detail>());
 				await (s.DeleteAsync(master));
 				await (s.FlushAsync());
 			}
@@ -160,7 +160,7 @@ namespace NHibernate.Test.Legacy
 			{
 				Assert.ThrowsAsync<QueryException>(() =>s.CreateCriteria(typeof(Master))
 					.Add(Expression.Eq("Details.I", 10))
-					.ListAsync());
+					.ListAsync<Master>());
 			}
 		}
 
@@ -174,7 +174,7 @@ namespace NHibernate.Test.Legacy
 				Assert.AreEqual(1, (await (s.CreateCriteria(typeof(Master))
 				                   	.CreateAlias("Details", "detail", JoinType.LeftOuterJoin)
 				                   	.Fetch("Details")
-				                   	.ListAsync())).Count);
+				                   	.ListAsync<Master>())).Count);
 				await (s.DeleteAsync("from Master"));
 				await (s.FlushAsync());
 			}

@@ -9,10 +9,6 @@
 
 
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Text;
-using NHibernate.Dialect;
 using NUnit.Framework;
 
 namespace NHibernate.Test.NHSpecificTest.NH1349
@@ -65,7 +61,7 @@ namespace NHibernate.Test.NHSpecificTest.NH1349
 			{
 				using(var tran=session.BeginTransaction())
 				{
-					IList ret = await (session.CreateCriteria(typeof(Services)).SetMaxResults(5).ListAsync()); //this breaks
+					var ret = await (session.CreateCriteria(typeof(Services)).SetMaxResults(5).ListAsync<Services>()); //this breaks
 					Assert.That(ret.Count,Is.EqualTo(1));
 				}
 			}

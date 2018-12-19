@@ -229,7 +229,7 @@ namespace NHibernate.Test.TypesTest
 				var aaItems =
 					await (s.CreateCriteria<StringClass>()
 					 .Add(Restrictions.Like("StringValue", "%AAAAAAAAA%"))
-					 .ListAsync());
+					 .ListAsync<StringClass>());
 
 				Assert.That(aaItems.Count, Is.EqualTo(2));
 			}
@@ -273,7 +273,7 @@ namespace NHibernate.Test.TypesTest
 				var aaItems =
 					await (s.CreateCriteria<StringClass>()
 					 .Add(Restrictions.Eq("StringValue", "AAAAAAAAABx"))
-					 .ListAsync());
+					 .ListAsync<StringClass>());
 
 				Assert.That(aaItems.Count, Is.EqualTo(0));
 			}

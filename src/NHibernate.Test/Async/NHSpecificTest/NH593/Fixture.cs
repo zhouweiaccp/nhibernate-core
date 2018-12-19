@@ -26,7 +26,7 @@ namespace NHibernate.Test.NHSpecificTest.NH593
 				user.UserId = 10;
 				Assert.ThrowsAsync<QueryException>(() => session.CreateCriteria(typeof(Blog))
 					.Add(Expression.In("Users", new User[] {user}))
-					.ListAsync());
+					.ListAsync<Blog>());
 			}
 		}
 	}

@@ -87,9 +87,9 @@ namespace NHibernate.Test.Subclass
 			ISession s3 = OpenSession();
 			ITransaction t3 = s3.BeginTransaction();
 
-			IList results3 = s3.CreateCriteria(typeof(SubclassBase))
+			var results3 = s3.CreateCriteria(typeof(SubclassBase))
 				.Add(Expression.In("TestString", new string[] {"Did it get updated", "Updated SubclassOne String"}))
-				.List();
+				.List<SubclassBase>();
 
 			Assert.AreEqual(2, results3.Count);
 

@@ -24,8 +24,8 @@ namespace NHibernate.Test.Legacy
 		public void FetchManyToOne()
 		{
 			ISession s = OpenSession();
-			s.CreateCriteria(typeof(Po)).Fetch("Set").List();
-			s.CreateCriteria(typeof(Po)).Fetch("List").List();
+			s.CreateCriteria(typeof(Po)).Fetch("Set").List<Po>();
+			s.CreateCriteria(typeof(Po)).Fetch("List").List<Po>();
 			s.Close();
 		}
 

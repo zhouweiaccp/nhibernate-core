@@ -10,10 +10,6 @@
 
 using NUnit.Framework;
 
-using System;
-using System.Collections;
-using System.Text;
-
 namespace NHibernate.Test.NHSpecificTest.NH1064
 {
 	using System.Threading.Tasks;
@@ -57,14 +53,14 @@ namespace NHibernate.Test.NHSpecificTest.NH1064
 					.Fetch("Bs")
 					.Fetch("C");
 				// According to the issue description, the following line
-				// would have thown an NHibernate.ADOException before the fix
-				IList result = await (crit.ListAsync());
+				// would have thrown an NHibernate.ADOException before the fix
+				var result = await (crit.ListAsync<TypeA>());
 
 				Assert.AreEqual(1, result.Count);
-				Assert.AreEqual(a1.Id, (result[0] as TypeA).Id);
-				Assert.AreEqual(a1.Name, (result[0] as TypeA).Name);
-				Assert.AreEqual(a1.C.Id, (result[0] as TypeA).C.Id);
-				Assert.AreEqual(a1.C.Name, (result[0] as TypeA).C.Name);
+				Assert.AreEqual(a1.Id, result[0].Id);
+				Assert.AreEqual(a1.Name, result[0].Name);
+				Assert.AreEqual(a1.C.Id, result[0].C.Id);
+				Assert.AreEqual(a1.C.Name, result[0].C.Name);
 
 				await (tx.CommitAsync());
 			}

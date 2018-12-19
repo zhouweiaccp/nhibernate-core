@@ -35,7 +35,7 @@ namespace NHibernate.Test.NHSpecificTest.NH1250
 			{
 				await (s.CreateCriteria(typeof(Party))
 					.SetMaxResults(10)
-					.ListAsync());
+					.ListAsync<Party>());
 				await (tx.CommitAsync());
 			}
 		}

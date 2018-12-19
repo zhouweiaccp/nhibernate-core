@@ -59,9 +59,9 @@ namespace NHibernate.Test.Criteria
 				// finds all courses which have a description equal to '%1'
 				Course example = new Course();
 				example.Description = "&%1";
-				IList result =
+				var result =
 					session.CreateCriteria(typeof(Course)).Add(
-						Example.Create(example).IgnoreCase().EnableLike().SetEscapeCharacter('&')).List();
+						Example.Create(example).IgnoreCase().EnableLike().SetEscapeCharacter('&')).List<Course>();
 				Assert.AreEqual(1, result.Count);
 			}
 
@@ -70,9 +70,9 @@ namespace NHibernate.Test.Criteria
 				// finds all courses which contain '%' as the first char in the description
 				Course example = new Course();
 				example.Description = "&%%";
-				IList result =
+				var result =
 					session.CreateCriteria(typeof(Course)).Add(
-						Example.Create(example).IgnoreCase().EnableLike().SetEscapeCharacter('&')).List();
+						Example.Create(example).IgnoreCase().EnableLike().SetEscapeCharacter('&')).List<Course>();
 				Assert.AreEqual(2, result.Count);
 			}
 
@@ -125,7 +125,7 @@ namespace NHibernate.Test.Criteria
 
 				session.CreateCriteria(typeof(Student))
 					.Add(Subqueries.PropertyEq("Name", dc))
-					.List();
+					.List<Student>();
 			}
 		}
 
@@ -193,23 +193,23 @@ namespace NHibernate.Test.Criteria
 			{
 				session.CreateCriteria(typeof (Student))
 					.Add(Subqueries.PropertyEqAll("Name", dc))
-					.List();
+					.List<Student>();
 			}
 
 			session.CreateCriteria(typeof(Student))
 				.Add(Subqueries.Exists(dc))
-				.List();
+				.List<Student>();
 
 			if (TestDialect.SupportsOperatorAll)
 			{
 				session.CreateCriteria(typeof (Student))
 					.Add(Property.ForName("Name").EqAll(dc))
-					.List();
+					.List<Student>();
 			}
 
 			session.CreateCriteria(typeof(Student))
 				.Add(Subqueries.In("Gavin King", dc))
-				.List();
+				.List<Student>();
 
 			if (Dialect.SupportsScalarSubSelects)
 			{
@@ -219,7 +219,7 @@ namespace NHibernate.Test.Criteria
 
 				session.CreateCriteria(typeof(Enrolment), "e")
 					.Add(Subqueries.Eq("Gavin King", dc2))
-					.List();
+					.List<Enrolment>();
 
 				DetachedCriteria dc3 = DetachedCriteria.For(typeof(Student), "st")
 					.CreateCriteria("Enrolments")
@@ -229,7 +229,7 @@ namespace NHibernate.Test.Criteria
 
 				session.CreateCriteria(typeof(Enrolment), "e")
 					.Add(Subqueries.Eq("Gavin King", dc3))
-					.List();
+					.List<Enrolment>();
 
 				DetachedCriteria courseCriteria = DetachedCriteria.For(typeof(Course))
 					.Add(Property.ForName("Description").Eq("Hibernate Training"))
@@ -295,8 +295,8 @@ namespace NHibernate.Test.Criteria
 		
 				session.CreateCriteria<Student>()
 					.Add(Subqueries.Exists(dc))
-					.List();
-				
+					.List<Student>();
+
 				t.Commit();
 			}
 
@@ -309,7 +309,7 @@ namespace NHibernate.Test.Criteria
 					{
 						session.CreateCriteria<Student>()
 							.Add(Subqueries.PropertyEqAll("CityState", dc))
-							.List();
+							.List<Student>();
 
 						Assert.Fail("should have failed because cannot compare subquery results with multiple columns");
 					}
@@ -330,7 +330,7 @@ namespace NHibernate.Test.Criteria
 					{
 						session.CreateCriteria<Student>()
 							.Add(Property.ForName("CityState").EqAll(dc))
-							.List();
+							.List<Student>();
 
 						Assert.Fail("should have failed because cannot compare subquery results with multiple columns");
 					}
@@ -352,8 +352,8 @@ namespace NHibernate.Test.Criteria
 				{
 					session.CreateCriteria<Student>()
 						.Add(Subqueries.In(odessaWa, dc))
-						.List();
-					
+						.List<Student>();
+
 					Assert.Fail("should have failed because cannot compare subquery results with multiple columns");
 				}
 				catch (NHibernate.Exceptions.GenericADOException)
@@ -377,7 +377,7 @@ namespace NHibernate.Test.Criteria
 				{
 					session.CreateCriteria<Student>("st2")
 						.Add( Subqueries.Eq(odessaWa, dc2))
-						.List();
+						.List<Student>();
 					Assert.Fail("should have failed because cannot compare subquery results with multiple columns");
 				}
 				catch (NHibernate.Exceptions.GenericADOException)
@@ -402,8 +402,8 @@ namespace NHibernate.Test.Criteria
 				{
 					session.CreateCriteria<Enrolment>("e")
 						.Add(Subqueries.Eq(odessaWa, dc3))
-						.List();
-					
+						.List<Enrolment>();
+
 					Assert.Fail("should have failed because cannot compare subquery results with multiple columns");
 				}
 				catch (NHibernate.Exceptions.GenericADOException)
@@ -437,7 +437,7 @@ namespace NHibernate.Test.Criteria
 				.CreateAlias("mother", "m")
 				.Add(Property.ForName("m.class").Eq(typeof(Reptile)));
 			ICriteria cloned = CriteriaTransformer.Clone(c);
-			cloned.List();
+			cloned.List<Animal>();
 			t.Rollback();
 			s.Close();
 		}
@@ -456,7 +456,7 @@ namespace NHibernate.Test.Criteria
 			ICriteria cloned = CriteriaTransformer.TransformToRowCount(c);
 
 
-			cloned.List();
+			cloned.List<int>();
 			t.Rollback();
 			s.Close();
 		}
@@ -485,9 +485,9 @@ namespace NHibernate.Test.Criteria
 			session.Save(bizarroGavin);
 			session.Save(gavin);
 
-			IList result = dc.GetExecutableCriteria(session)
+			var result = dc.GetExecutableCriteria(session)
 				.SetMaxResults(3)
-				.List();
+				.List<long>();
 
 			Assert.AreEqual(2, result.Count);
 			Assert.AreEqual(232L, result[0]);
@@ -687,11 +687,11 @@ namespace NHibernate.Test.Criteria
 			session.Save(bizarroGavin);
 			session.Save(gavin);
 
-			IList result = CriteriaTransformer.Clone(dc)
+			var result = CriteriaTransformer.Clone(dc)
 				.AddOrder(Order.Asc("StudentNumber"))
 				.GetExecutableCriteria(session)
 				.SetMaxResults(3)
-				.List();
+				.List<long>();
 
 			Assert.AreEqual(2, result.Count);
 			Assert.AreEqual(232L, result[0]);
@@ -750,7 +750,7 @@ namespace NHibernate.Test.Criteria
 			gavin.Enrolments.Add(enrolment2);
 			s.Save(enrolment2);
 
-			IList list = s.CreateCriteria(typeof(Enrolment))
+			var list = s.CreateCriteria(typeof(Enrolment))
 				.CreateAlias("Student", "s")
 				.CreateAlias("Course", "c")
 				.Add(Expression.IsNotEmpty("s.Enrolments"))
@@ -758,7 +758,27 @@ namespace NHibernate.Test.Criteria
 								.Add(Projections.Property("s.Name"))
 								.Add(Projections.Property("c.Description")))
 				.SetCacheable(true)
-				.List();
+				.List<object[]>();
+
+			Assert.AreEqual(2, list.Count);
+			Assert.AreEqual(2, list[0].Length);
+			Assert.AreEqual(2, list[1].Length);
+
+			t.Commit();
+			s.Close();
+
+			s = OpenSession();
+			t = s.BeginTransaction();
+
+			s.CreateCriteria(typeof(Enrolment))
+				.CreateAlias("Student", "s")
+				.CreateAlias("Course", "c")
+				.Add(Expression.IsNotEmpty("s.Enrolments"))
+				.SetProjection(Projections.ProjectionList()
+								.Add(Projections.Property("s.Name"))
+								.Add(Projections.Property("c.Description")))
+				.SetCacheable(true)
+				.List<object[]>();
 
 			Assert.AreEqual(2, list.Count);
 			Assert.AreEqual(2, ((object[])list[0]).Length);
@@ -778,27 +798,7 @@ namespace NHibernate.Test.Criteria
 								.Add(Projections.Property("s.Name"))
 								.Add(Projections.Property("c.Description")))
 				.SetCacheable(true)
-				.List();
-
-			Assert.AreEqual(2, list.Count);
-			Assert.AreEqual(2, ((object[])list[0]).Length);
-			Assert.AreEqual(2, ((object[])list[1]).Length);
-
-			t.Commit();
-			s.Close();
-
-			s = OpenSession();
-			t = s.BeginTransaction();
-
-			s.CreateCriteria(typeof(Enrolment))
-				.CreateAlias("Student", "s")
-				.CreateAlias("Course", "c")
-				.Add(Expression.IsNotEmpty("s.Enrolments"))
-				.SetProjection(Projections.ProjectionList()
-								.Add(Projections.Property("s.Name"))
-								.Add(Projections.Property("c.Description")))
-				.SetCacheable(true)
-				.List();
+				.List<object[]>();
 
 			Assert.AreEqual(2, list.Count);
 			Assert.AreEqual(2, ((object[])list[0]).Length);
@@ -968,7 +968,7 @@ namespace NHibernate.Test.Criteria
 			Assert.AreEqual(384.0D, (Double)result[3], 0.01D);
 
 
-			IList resultWithMaps = s.CreateCriteria(typeof(Enrolment))
+			var resultWithMaps = s.CreateCriteria(typeof(Enrolment))
 				.SetProjection(Projections.Distinct(Projections.ProjectionList()
 														.Add(Projections.Property("StudentNumber"), "stNumber")
 														.Add(Projections.Property("CourseCode"), "cCode"))
@@ -977,10 +977,10 @@ namespace NHibernate.Test.Criteria
 				.Add(Expression.Lt("StudentNumber", 668L))
 				.AddOrder(Order.Asc("stNumber"))
 				.SetResultTransformer(CriteriaSpecification.AliasToEntityMap)
-				.List();
+				.List<IDictionary>();
 
 			Assert.AreEqual(1, resultWithMaps.Count);
-			IDictionary m1 = (IDictionary)resultWithMaps[0];
+			IDictionary m1 = resultWithMaps[0];
 
 			Assert.AreEqual(667L, m1["stNumber"]);
 			Assert.AreEqual(course.CourseCode, m1["cCode"]);
@@ -989,7 +989,7 @@ namespace NHibernate.Test.Criteria
 				.SetProjection(Projections.Property("StudentNumber").As("stNumber"))
 				.AddOrder(Order.Desc("stNumber"))
 				.SetResultTransformer(CriteriaSpecification.AliasToEntityMap)
-				.List();
+				.List<IDictionary>();
 
 			Assert.AreEqual(2, resultWithMaps.Count);
 			IDictionary m0 = (IDictionary)resultWithMaps[0];
@@ -999,7 +999,7 @@ namespace NHibernate.Test.Criteria
 			Assert.AreEqual(667L, m0["stNumber"]);
 
 
-			IList resultWithAliasedBean = s.CreateCriteria(typeof(Enrolment))
+			var resultWithAliasedBean = s.CreateCriteria(typeof(Enrolment))
 				.CreateAlias("Student", "st")
 				.CreateAlias("Course", "co")
 				.SetProjection(Projections.ProjectionList()
@@ -1008,11 +1008,11 @@ namespace NHibernate.Test.Criteria
 				)
 				.AddOrder(Order.Desc("studentName"))
 				.SetResultTransformer(Transformers.AliasToBean(typeof(StudentDTO)))
-				.List();
+				.List<StudentDTO>();
 
 			Assert.AreEqual(2, resultWithAliasedBean.Count);
 
-			StudentDTO dto = (StudentDTO)resultWithAliasedBean[0];
+			StudentDTO dto = resultWithAliasedBean[0];
 			Assert.IsNotNull(dto.Description);
 			Assert.IsNotNull(dto.Name);
 
@@ -1063,7 +1063,7 @@ namespace NHibernate.Test.Criteria
 
 			if (TestDialect.SupportsCountDistinct)
 			{
-				IList list = s.CreateCriteria(typeof(Enrolment))
+				var list = s.CreateCriteria(typeof(Enrolment))
 					.CreateAlias("Student", "st")
 					.CreateAlias("Course", "co")
 					.SetProjection(Projections.ProjectionList()
@@ -1071,7 +1071,7 @@ namespace NHibernate.Test.Criteria
 									.Add(Projections.Count("st.StudentNumber").SetDistinct())
 									.Add(Projections.GroupProperty("Year"))
 					)
-					.List();
+					.List<object[]>();
 
 				Assert.AreEqual(2, list.Count);
 			}
@@ -1169,11 +1169,11 @@ namespace NHibernate.Test.Criteria
 				.Add(Expression.Lt("StudentNumber", 668L))
 				.AddOrder(Order.Asc("stNumber"))
 				.SetResultTransformer(CriteriaSpecification.AliasToEntityMap);
-			IList resultWithMaps = CriteriaTransformer.Clone(criteriaToClone2)
-				.List();
+			var resultWithMaps = CriteriaTransformer.Clone(criteriaToClone2)
+				.List<IDictionary>();
 
 			Assert.AreEqual(1, resultWithMaps.Count);
-			IDictionary m1 = (IDictionary)resultWithMaps[0];
+			IDictionary m1 = resultWithMaps[0];
 
 			Assert.AreEqual(667L, m1["stNumber"]);
 			Assert.AreEqual(course.CourseCode, m1["cCode"]);
@@ -1183,11 +1183,11 @@ namespace NHibernate.Test.Criteria
 				.AddOrder(Order.Desc("stNumber"))
 				.SetResultTransformer(CriteriaSpecification.AliasToEntityMap);
 			resultWithMaps = CriteriaTransformer.Clone(criteria)
-				.List();
+				.List<IDictionary>();
 
 			Assert.AreEqual(2, resultWithMaps.Count);
-			IDictionary m0 = (IDictionary)resultWithMaps[0];
-			m1 = (IDictionary)resultWithMaps[1];
+			IDictionary m0 = resultWithMaps[0];
+			m1 = resultWithMaps[1];
 
 			Assert.AreEqual(101L, m1["stNumber"]);
 			Assert.AreEqual(667L, m0["stNumber"]);
@@ -1202,12 +1202,12 @@ namespace NHibernate.Test.Criteria
 				)
 				.AddOrder(Order.Desc("studentName"))
 				.SetResultTransformer(Transformers.AliasToBean(typeof(StudentDTO)));
-			IList resultWithAliasedBean = CriteriaTransformer.Clone(criteriaToClone3)
-				.List();
+			var resultWithAliasedBean = CriteriaTransformer.Clone(criteriaToClone3)
+				.List<StudentDTO>();
 
 			Assert.AreEqual(2, resultWithAliasedBean.Count);
 
-			StudentDTO dto = (StudentDTO)resultWithAliasedBean[0];
+			StudentDTO dto = resultWithAliasedBean[0];
 			Assert.IsNotNull(dto.Description);
 			Assert.IsNotNull(dto.Name);
 
@@ -1260,8 +1260,8 @@ namespace NHibernate.Test.Criteria
 									.Add(Projections.Count("st.StudentNumber").SetDistinct())
 									.Add(Projections.GroupProperty("Year"))
 					);
-				IList list = CriteriaTransformer.Clone(criteriaToClone5)
-					.List();
+				var list = CriteriaTransformer.Clone(criteriaToClone5)
+					.List<object[]>();
 
 				Assert.AreEqual(2, list.Count);
 			}
@@ -1328,13 +1328,13 @@ namespace NHibernate.Test.Criteria
 			s.Flush();
 
 			// Subtest #1
-			IList resultList = s.CreateCriteria<Enrolment>()
+			var resultList = s.CreateCriteria<Enrolment>()
 				.SetProjection(Projections.ProjectionList()
 					.Add(Property.ForName("Student"), "student")
 					.Add(Property.ForName("Course"), "course")
 					.Add(Property.ForName("Semester"), "semester")
 					.Add(Property.ForName("Year"), "year")
-				).List();
+				).List<object[]>();
 
 			Assert.That(resultList.Count, Is.EqualTo(2));
 			
@@ -1354,8 +1354,8 @@ namespace NHibernate.Test.Criteria
 					.Add(Property.ForName("Name"), "name")
 					.Add(Property.ForName("CityState"), "cityState")
 					.Add(Property.ForName("PreferredCourse"), "preferredCourse")
-				).List();
-			
+				).List<object[]>();
+
 			Assert.That(resultList.Count, Is.EqualTo(2));
 			
 			foreach(object[] objects in resultList)
@@ -1384,8 +1384,8 @@ namespace NHibernate.Test.Criteria
 					.Add(Property.ForName("Name"), "name")
 					.Add(Property.ForName("CityState"), "cityState")
 					.Add(Property.ForName("PreferredCourse"), "preferredCourse")
-				).List();
-			
+				).List<object[]>();
+
 			Assert.That(resultList.Count, Is.EqualTo(1));
 
 			// Subtest #4
@@ -1443,7 +1443,7 @@ namespace NHibernate.Test.Criteria
 				.UniqueResult();
 
 			// Subtest #8
-			IList resultWithMaps = s.CreateCriteria(typeof(Enrolment))
+			var resultWithMaps = s.CreateCriteria(typeof(Enrolment))
 				.SetProjection(Projections.ProjectionList()
 								.Add(Property.ForName("StudentNumber").As("stNumber"))
 								.Add(Property.ForName("CourseCode").As("cCode"))
@@ -1452,11 +1452,11 @@ namespace NHibernate.Test.Criteria
 				.Add(Property.ForName("StudentNumber").Lt(668L))
 				.AddOrder(Property.ForName("StudentNumber").Asc())
 				.SetResultTransformer(CriteriaSpecification.AliasToEntityMap)
-				.List();
+				.List<IDictionary>();
 
 			Assert.AreEqual(1, resultWithMaps.Count);
 			
-			IDictionary m1 = (IDictionary)resultWithMaps[0];
+			IDictionary m1 = resultWithMaps[0];
 			Assert.AreEqual(667L, m1["stNumber"]);
 			Assert.AreEqual(course.CourseCode, m1["cCode"]);
 
@@ -1465,17 +1465,17 @@ namespace NHibernate.Test.Criteria
 				.SetProjection(Property.ForName("StudentNumber").As("stNumber"))
 				.AddOrder(Order.Desc("stNumber"))
 				.SetResultTransformer(CriteriaSpecification.AliasToEntityMap)
-				.List();
+				.List<IDictionary>();
 
 			Assert.AreEqual(2, resultWithMaps.Count);
 
-			IDictionary m0 = (IDictionary)resultWithMaps[0];
-			m1 = (IDictionary)resultWithMaps[1];
+			IDictionary m0 = resultWithMaps[0];
+			m1 = resultWithMaps[1];
 			Assert.AreEqual(101L, m1["stNumber"]);
 			Assert.AreEqual(667L, m0["stNumber"]);
 
 			// Subtest #10
-			IList resultWithAliasedBean = s.CreateCriteria(typeof(Enrolment))
+			var resultWithAliasedBean = s.CreateCriteria(typeof(Enrolment))
 				.CreateAlias("Student", "st")
 				.CreateAlias("Course", "co")
 				.SetProjection(Projections.ProjectionList()
@@ -1484,12 +1484,12 @@ namespace NHibernate.Test.Criteria
 				)
 				.AddOrder(Order.Desc("studentName"))
 				.SetResultTransformer(Transformers.AliasToBean(typeof(StudentDTO)))
-				.List();
+				.List<StudentDTO>();
 
 			Assert.AreEqual(2, resultWithAliasedBean.Count);
 
 			// Subtest #11
-			StudentDTO dto = (StudentDTO)resultWithAliasedBean[0];
+			StudentDTO dto = resultWithAliasedBean[0];
 			Assert.IsNotNull(dto.Description);
 			Assert.IsNotNull(dto.Name);
 
@@ -1549,7 +1549,7 @@ namespace NHibernate.Test.Criteria
 			
 			Assert.AreEqual(7, array.Length);
 
-			IList list;
+			IList<object[]> list;
 
 			if (TestDialect.SupportsCountDistinct)
 			{
@@ -1562,7 +1562,7 @@ namespace NHibernate.Test.Criteria
 						.Add(Property.ForName("st.StudentNumber").Count().SetDistinct())
 						.Add(Property.ForName("Year").Group())
 					)
-					.List();
+					.List<object[]>();
 
 				Assert.AreEqual(2, list.Count);
 
@@ -1577,8 +1577,8 @@ namespace NHibernate.Test.Criteria
 					)
 					.AddOrder(Order.Asc("courseCode"))
 					.AddOrder(Order.Asc("studentNumber"))
-					.List();
-	
+					.List<object[]>();
+
 				Assert.That(list.Count, Is.EqualTo(2));
 
 				// Subtest #17
@@ -1592,8 +1592,8 @@ namespace NHibernate.Test.Criteria
 					)
 					.AddOrder(Order.Asc("cCode"))
 					.AddOrder(Order.Asc("stNumber"))
-					.List();
-	
+					.List<object[]>();
+
 				Assert.That(list.Count, Is.EqualTo(2));
 			}
 
@@ -1858,8 +1858,8 @@ namespace NHibernate.Test.Criteria
 			Assert.That(result, Is.InstanceOf<CityState>());
 			Assert.That(((CityState)result).City, Is.EqualTo("Odessa"));
 			Assert.That(((CityState)result).State, Is.EqualTo("WA"));
-	
-			IList list = s.CreateCriteria<Enrolment>()
+
+			s.CreateCriteria<Enrolment>()
 				.CreateAlias("Student", "st")
 				.CreateAlias("Course", "co")
 				.SetProjection(Projections.ProjectionList()
@@ -1867,8 +1867,8 @@ namespace NHibernate.Test.Criteria
 					.Add(Property.ForName("st.CityState").Group())
 					.Add(Property.ForName("Year").Group())
 				)
-				.List();
-	
+				.List<object[]>();
+
 			s.Delete(gavin);
 			s.Delete(xam);
 			s.Delete(course);
@@ -1964,11 +1964,11 @@ namespace NHibernate.Test.Criteria
 																			.AddOrder(Property.ForName("StudentNumber").Asc())
 																			.SetResultTransformer(CriteriaSpecification.AliasToEntityMap)
 				);
-			IList resultWithMaps = clonedCriteriaProjection
-				.List();
+			var resultWithMaps = clonedCriteriaProjection
+				.List<IDictionary>();
 
 			Assert.AreEqual(1, resultWithMaps.Count);
-			IDictionary m1 = (IDictionary)resultWithMaps[0];
+			IDictionary m1 = resultWithMaps[0];
 
 			Assert.AreEqual(667L, m1["stNumber"]);
 			Assert.AreEqual(course.CourseCode, m1["cCode"]);
@@ -1978,17 +1978,17 @@ namespace NHibernate.Test.Criteria
 														.AddOrder(Order.Desc("stNumber"))
 														.SetResultTransformer(CriteriaSpecification.AliasToEntityMap)
 				)
-				.List();
+				.List<IDictionary>();
 
 			Assert.AreEqual(2, resultWithMaps.Count);
-			IDictionary m0 = (IDictionary)resultWithMaps[0];
-			m1 = (IDictionary)resultWithMaps[1];
+			IDictionary m0 = resultWithMaps[0];
+			m1 = resultWithMaps[1];
 
 			Assert.AreEqual(101L, m1["stNumber"]);
 			Assert.AreEqual(667L, m0["stNumber"]);
 
 
-			IList resultWithAliasedBean = CriteriaTransformer.Clone(s.CreateCriteria(typeof(Enrolment))
+			var resultWithAliasedBean = CriteriaTransformer.Clone(s.CreateCriteria(typeof(Enrolment))
 																		.CreateAlias("Student", "st")
 																		.CreateAlias("Course", "co")
 																		.SetProjection(Projections.ProjectionList()
@@ -1998,11 +1998,11 @@ namespace NHibernate.Test.Criteria
 																		.AddOrder(Order.Desc("studentName"))
 																		.SetResultTransformer(Transformers.AliasToBean(typeof(StudentDTO)))
 				)
-				.List();
+				.List<StudentDTO>();
 
 			Assert.AreEqual(2, resultWithAliasedBean.Count);
 
-			StudentDTO dto = (StudentDTO)resultWithAliasedBean[0];
+			StudentDTO dto = resultWithAliasedBean[0];
 			Assert.IsNotNull(dto.Description);
 			Assert.IsNotNull(dto.Name);
 
@@ -2046,7 +2046,7 @@ namespace NHibernate.Test.Criteria
 
 			if (TestDialect.SupportsCountDistinct)
 			{
-				IList list = CriteriaTransformer.Clone(
+				var list = CriteriaTransformer.Clone(
 					s.CreateCriteria(typeof(Enrolment))
 					 .CreateAlias("Student", "st")
 					 .CreateAlias("Course", "co")
@@ -2056,7 +2056,7 @@ namespace NHibernate.Test.Criteria
 						            .Add(Property.ForName("st.StudentNumber").Count().SetDistinct())
 						            .Add(Property.ForName("Year").Group())
 					 )
-				).List();
+				).List<object[]>();
 
 				Assert.AreEqual(2, list.Count);
 			}
@@ -2077,11 +2077,11 @@ namespace NHibernate.Test.Criteria
 
 			s.CreateCriteria(typeof(Reptile))
 				.Add(Expression.IsEmpty("offspring"))
-				.List();
+				.List<Reptile>();
 
 			s.CreateCriteria(typeof(Reptile))
 				.Add(Expression.IsNotEmpty("offspring"))
-				.List();
+				.List<Reptile>();
 
 			t.Rollback();
 			s.Close();
@@ -2097,7 +2097,7 @@ namespace NHibernate.Test.Criteria
 			ICriteria c = s.CreateCriteria<Animal>("a")
 				.CreateAlias("mother", "m")
 				.Add(Property.ForName("m.class").Eq(typeof(Reptile)));
-			c.List();
+			c.List<Animal>();
 			t.Rollback();
 			s.Close();
 		}
@@ -2107,8 +2107,8 @@ namespace NHibernate.Test.Criteria
 		{
 			ISession s = OpenSession();
 			ITransaction t = s.BeginTransaction();
-			s.CreateCriteria(typeof(Course)).SetProjection(Projections.Property("CourseCode")).List();
-			s.CreateCriteria(typeof(Course)).SetProjection(Projections.Id()).List();
+			s.CreateCriteria(typeof(Course)).SetProjection(Projections.Property("CourseCode")).List<string>();
+			s.CreateCriteria(typeof(Course)).SetProjection(Projections.Id()).List<string>();
 			t.Rollback();
 			s.Close();
 		}
@@ -2155,11 +2155,11 @@ namespace NHibernate.Test.Criteria
 				s.Save(enrolment);
 	
 				s.Flush();
-				
-				IList enrolments = (IList)s.CreateCriteria<Enrolment>()
+
+				s.CreateCriteria<Enrolment>()
 					.SetProjection(Projections.Id())
-					.List();
-				
+					.List<Enrolment>();
+
 				t.Rollback();
 			}
 		}
@@ -2206,14 +2206,14 @@ namespace NHibernate.Test.Criteria
 				s.Save(enrolment);
 	
 				s.Flush();
-				
-				IList data = (IList)s.CreateCriteria<Enrolment>()
+
+				s.CreateCriteria<Enrolment>()
 					.SetProjection(Projections.ProjectionList()
 						.Add(Projections.Property("Semester"))
 						.Add(Projections.Property("Year"))
 						.Add(Projections.Id()))
-				.List();
-				
+				.List<object[]>();
+
 				t.Rollback();
 			}
 		}
@@ -2230,8 +2230,8 @@ namespace NHibernate.Test.Criteria
 				course.CourseMeetings.Add(new CourseMeeting(course, "Monday", 1, "1313 Mockingbird Lane"));
 				s.Save(course);
 				s.Flush();
-		
-				IList data = (IList)s.CreateCriteria<CourseMeeting>().SetProjection(Projections.Id()).List();
+
+				s.CreateCriteria<CourseMeeting>().SetProjection(Projections.Id()).List<CourseMeetingId>();
 
 				t.Rollback();
 			}
@@ -2249,10 +2249,10 @@ namespace NHibernate.Test.Criteria
 				course.CourseMeetings.Add(new CourseMeeting(course, "Monday", 1, "1313 Mockingbird Lane"));
 				s.Save(course);
 				s.Flush();
-		
-				IList data = (IList)s.CreateCriteria<CourseMeeting>()
+
+				s.CreateCriteria<CourseMeeting>()
 					.SetProjection(Projections.Id().As("id"))
-					.List();
+					.List<CourseMeetingId>();
 
 				t.Rollback();
 			}
@@ -2270,11 +2270,11 @@ namespace NHibernate.Test.Criteria
 				gaith.CityState = new CityState("Chicago", "Illinois");
 				s.Save(gaith);
 				s.Flush();
-		
-				IList cityStates = (IList)s.CreateCriteria<Student>()
+
+				s.CreateCriteria<Student>()
 					.SetProjection(Projections.Property("CityState"))
-					.List();
-				
+					.List<CityState>();
+
 				t.Rollback();
 			}
 		}
@@ -2291,13 +2291,13 @@ namespace NHibernate.Test.Criteria
 				gaith.CityState = new CityState("Chicago", "Illinois");
 				s.Save(gaith);
 				s.Flush();
-	
-				IList data = (IList)s.CreateCriteria<Student>()
+
+				s.CreateCriteria<Student>()
 					.SetProjection(Projections.ProjectionList()
 						.Add(Projections.Property("CityState"))
 						.Add(Projections.Property("Name")))
-						.List();
-				
+						.List<object[]>();
+
 				t.Rollback();
 			}
 		}
@@ -2307,8 +2307,8 @@ namespace NHibernate.Test.Criteria
 		{
 			ISession s = OpenSession();
 			ITransaction t = s.BeginTransaction();
-			s.CreateCriteria<Course>().SetProjection(Projections.Property("CourseCode")).List();
-			CriteriaTransformer.Clone(s.CreateCriteria(typeof(Course)).SetProjection(Projections.Id())).List();
+			s.CreateCriteria<Course>().SetProjection(Projections.Property("CourseCode")).List<string>();
+			CriteriaTransformer.Clone(s.CreateCriteria(typeof(Course)).SetProjection(Projections.Id())).List<string>();
 			t.Rollback();
 			s.Close();
 		}
@@ -2352,7 +2352,7 @@ namespace NHibernate.Test.Criteria
 				.CreateCriteria("PreferredCourse", JoinType.LeftOuterJoin)
 				.AddOrder(Order.Asc("CourseCode"));
 
-			IList result = CriteriaTransformer.Clone(criteria).List();
+			var result = CriteriaTransformer.Clone(criteria).List<string>();
 
 			Assert.AreEqual(3, result.Count);
 
@@ -2394,11 +2394,11 @@ namespace NHibernate.Test.Criteria
 			johnDoe.PreferredCourse = null;
 			session.Save(johnDoe);
 
-			IList result = session.CreateCriteria(typeof(Student))
+			var result = session.CreateCriteria(typeof(Student))
 				.SetProjection(Property.ForName("PreferredCourse.CourseCode"))
 				.CreateCriteria("PreferredCourse", JoinType.LeftOuterJoin)
 				.AddOrder(Order.Asc("CourseCode"))
-				.List();
+				.List<string>();
 			Assert.AreEqual(3, result.Count);
 			// can't be sure of NULL comparison ordering aside from they should
 			// either come first or last
@@ -2414,25 +2414,25 @@ namespace NHibernate.Test.Criteria
 				Assert.AreEqual("HIB-B", result[1]);
 			}
 
-			result = session.CreateCriteria(typeof(Student))
+			var students = session.CreateCriteria(typeof(Student))
 				.Fetch("PreferredCourse")
 				.CreateCriteria("PreferredCourse", JoinType.LeftOuterJoin)
 				.AddOrder(Order.Asc("CourseCode"))
-				.List();
-			Assert.AreEqual(3, result.Count);
-			Assert.IsNotNull(result[0]);
-			Assert.IsNotNull(result[1]);
-			Assert.IsNotNull(result[2]);
+				.List<Student>();
+			Assert.AreEqual(3, students.Count);
+			Assert.IsNotNull(students[0]);
+			Assert.IsNotNull(students[1]);
+			Assert.IsNotNull(students[2]);
 
-			result = session.CreateCriteria(typeof(Student))
+			students = session.CreateCriteria(typeof(Student))
 				.Fetch("PreferredCourse")
 				.CreateAlias("PreferredCourse", "pc", JoinType.LeftOuterJoin)
 				.AddOrder(Order.Asc("pc.CourseCode"))
-				.List();
-			Assert.AreEqual(3, result.Count);
-			Assert.IsNotNull(result[0]);
-			Assert.IsNotNull(result[1]);
-			Assert.IsNotNull(result[2]);
+				.List<Student>();
+			Assert.AreEqual(3, students.Count);
+			Assert.IsNotNull(students[0]);
+			Assert.IsNotNull(students[1]);
+			Assert.IsNotNull(students[2]);
 
 			session.Delete(gavin);
 			session.Delete(leonardo);
@@ -2450,7 +2450,7 @@ namespace NHibernate.Test.Criteria
 			{
 				Assert.Throws<QueryException>(() => session.CreateCriteria(typeof(Enrolment))
 					.Add(Expression.Eq("Student", 10)) // Type mismatch!
-					.List());
+					.List<Enrolment>());
 			}
 		}
 
@@ -2483,10 +2483,10 @@ namespace NHibernate.Test.Criteria
 
 			using (ISession session = OpenSession())
 			{
-				IList l = session.CreateCriteria(typeof(MaterialUnit), "mu")
+				var l = session.CreateCriteria(typeof(MaterialUnit), "mu")
 					.CreateAlias("mu.Material", "ma")
 					.Add(Property.ForName("ma.class").Eq(typeof(MaterialUnitable)))
-					.List();
+					.List<MaterialUnit>();
 				Assert.AreEqual(3, l.Count);
 			}
 
@@ -2548,9 +2548,9 @@ namespace NHibernate.Test.Criteria
 			session.Save(bizarroGavin);
 			session.Save(gavin);
 
-			IList result = dc.GetExecutableCriteria(session)
+			var result = dc.GetExecutableCriteria(session)
 				.SetMaxResults(3)
-				.List();
+				.List<object[]>();
 
 			Assert.AreEqual(2, result.Count);
 
@@ -2585,9 +2585,9 @@ namespace NHibernate.Test.Criteria
 			session.Save(bizarroGavin);
 			session.Save(gavin);
 
-			IList result = dc.GetExecutableCriteria(session)
+			var result = dc.GetExecutableCriteria(session)
 				.SetMaxResults(3)
-				.List();
+				.List<Student>();
 
 			Assert.That(result.Count, Is.EqualTo(2));
 			Assert.That(result[0], Is.InstanceOf(typeof(Student)));
@@ -2613,14 +2613,14 @@ namespace NHibernate.Test.Criteria
 				.SetCacheable(true);
 				Assert.That(Sfi.Statistics.QueryCacheMissCount,Is.EqualTo(0));
 				Assert.That(Sfi.Statistics.QueryCacheHitCount, Is.EqualTo(0));
-				dc.GetExecutableCriteria(session).List();
+				dc.GetExecutableCriteria(session).List<long>();
 				Assert.That(Sfi.Statistics.QueryCacheMissCount, Is.EqualTo(1));
 
 				dc = DetachedCriteria.For(typeof(Student))
 				.Add(Property.ForName("Name").Eq("Gavin King"))
 				.SetProjection(Property.ForName("StudentNumber"))
 				.SetCacheable(true);
-				dc.GetExecutableCriteria(session).List();
+				dc.GetExecutableCriteria(session).List<long>();
 
 				Assert.That(Sfi.Statistics.QueryCacheMissCount, Is.EqualTo(1));
 				Assert.That(Sfi.Statistics.QueryCacheHitCount, Is.EqualTo(1));
@@ -2660,7 +2660,7 @@ namespace NHibernate.Test.Criteria
 				gavin.StudentNumber = 232;
 				session.Save(gavin);
 
-				IList result = c.List();
+				var result = c.List<Student>();
 
 				Assert.AreEqual(0, result.Count);
 
@@ -2687,8 +2687,8 @@ namespace NHibernate.Test.Criteria
 				ICriteria rowCount = CriteriaTransformer.TransformToRowCount(criteria);
 
 				// IMPORTANT: The problem is executing BOTH queries at the same time... not just one
-				criteria.List();
-				rowCount.List();
+				criteria.List<long>();
+				rowCount.List<int>();
 
 				t.Commit();
 			}
@@ -2707,7 +2707,7 @@ namespace NHibernate.Test.Criteria
 
 				ICriteria countCriteria = CriteriaTransformer.TransformToRowCount(crit);
 
-				countCriteria.List();
+				countCriteria.List<int>();
 
 				t.Rollback();
 			}
@@ -2727,7 +2727,7 @@ namespace NHibernate.Test.Criteria
 							Projections.Constant(0),
 							Projections.Constant(1))));
 
-				criteria.List();
+				criteria.List<Student>();
 			}
 		}
 
@@ -2773,10 +2773,10 @@ namespace NHibernate.Test.Criteria
 				ICriteria criteria = session.CreateCriteria(typeof(Student));
 				criteria.SetMaxResults(1);
 				criteria.SetFirstResult(1);
-				IList result = criteria.SetProjection(Projections.Alias(conditional, "CheckName"))
+				criteria.SetProjection(Projections.Alias(conditional, "CheckName"))
 					.AddOrder(Order.Asc("CheckName"))
-					.List();
-	
+					.List<string>();
+
 				session.Delete(gavin);
 				session.Delete(leonardo);
 				session.Delete(johnDoe);
@@ -2802,7 +2802,7 @@ namespace NHibernate.Test.Criteria
 
 				criteria.Add(new LikeExpression(Projections.Property("Name"), "John", MatchMode.Anywhere));
 
-				Assert.AreEqual(1, criteria.List().Count);
+				Assert.AreEqual(1, criteria.List<Student>().Count);
 			}
 
 			using (ISession session = this.OpenSession())
@@ -2811,7 +2811,7 @@ namespace NHibernate.Test.Criteria
 
 				criteria.Add(new LikeExpression("Name", "John"));
 
-				Assert.AreEqual(1, criteria.List().Count);
+				Assert.AreEqual(1, criteria.List<Student>().Count);
 			}
 
 			using (ISession session = this.OpenSession())
@@ -2830,7 +2830,7 @@ namespace NHibernate.Test.Criteria
 
 				criteria.Add(Restrictions.Like(Projections.Constant("Name"), "John", MatchMode.Anywhere));
 
-				criteria.List();
+				criteria.List<Student>();
 			}
 		}
 
@@ -2843,7 +2843,7 @@ namespace NHibernate.Test.Criteria
 
 				criteria.Add(Restrictions.InsensitiveLike(Projections.Constant("Name"), "John", MatchMode.Anywhere));
 
-				criteria.List();
+				criteria.List<Student>();
 			}
 		}
 
@@ -3015,8 +3015,8 @@ namespace NHibernate.Test.Criteria
 			using (ISession session = OpenSession())
 			{
 				// order the courses after all descriptions have been converted to lower case
-				IList result =
-					session.CreateCriteria(typeof (Course)).AddOrder(Order.Asc("Description").IgnoreCase()).List();
+				var result =
+					session.CreateCriteria(typeof (Course)).AddOrder(Order.Asc("Description").IgnoreCase()).List<Course>();
 				Assert.AreEqual(3, result.Count);
 				Course firstResult = (Course) result[0];
 				Assert.IsTrue(firstResult.Description.Contains("advanced csharp"), "Description should have 'advanced csharp', but has " + firstResult.Description);
