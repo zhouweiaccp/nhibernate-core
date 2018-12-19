@@ -93,7 +93,7 @@ namespace NHibernate.Test.TransactionTest
 			using (var t = s.BeginTransaction())
 			{
 				t.RegisterSynchronization(synchronisation);
-				s.CreateCriteria<object>().List();
+				s.CreateCriteria<object>().List<object>();
 
 				// Call session close while still inside transaction?
 				if (usePrematureClose)
@@ -119,7 +119,7 @@ namespace NHibernate.Test.TransactionTest
 				using (var t = s.BeginTransaction())
 				{
 					t.RegisterSynchronization(synchronisation);
-					s.CreateCriteria<object>().List();
+					s.CreateCriteria<object>().List<object>();
 
 					// Call session close while still inside transaction?
 					if (usePrematureClose)

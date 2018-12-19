@@ -185,16 +185,16 @@ namespace NHibernate.Test.FilterTest
 				       .SetParameter("asOfDate", testData.lastMonth);
 
 				log.Info("Criteria query against Salesperson...");
-				IList salespersons = await (session.CreateCriteria(typeof(Salesperson))
+				var salespersons = await (session.CreateCriteria(typeof(Salesperson))
 				                            .Fetch("orders")
-				                            .ListAsync());
+				                            .ListAsync<Salesperson>());
 				Assert.AreEqual(1, salespersons.Count, "Incorrect salesperson count");
-				Assert.AreEqual(1, ((Salesperson) salespersons[0]).Orders.Count, "Incorrect order count");
+				Assert.AreEqual(1, salespersons[0].Orders.Count, "Incorrect order count");
 
 				log.Info("Criteria query against Product...");
-				IList products = await (session.CreateCriteria(typeof(Product))
+				var products = await (session.CreateCriteria(typeof(Product))
 				                        .Add(Expression.Eq("StockNumber", 124))
-				                        .ListAsync());
+				                        .ListAsync<Product>());
 				Assert.AreEqual(1, products.Count, "Incorrect product count");
 			}
 		}
@@ -217,7 +217,7 @@ namespace NHibernate.Test.FilterTest
 				var result = await (session
 					.CreateCriteria<Order>()
 					.Add(Subqueries.In("steve", subquery))
-					.ListAsync());
+					.ListAsync<Order>());
 
 				Assert.That(result.Count, Is.EqualTo(1));
 
@@ -542,11 +542,11 @@ namespace NHibernate.Test.FilterTest
 		{
 			using (var session = OpenSession())
 			{
-				IList result = await (session.CreateCriteria(typeof(Product))
+				var result = await (session.CreateCriteria(typeof(Product))
 				                      .Add(Expression.Eq("id", testData.prod1Id))
-				                      .ListAsync());
+				                      .ListAsync<Product>());
 
-				Product prod = (Product) result[0];
+				Product prod = result[0];
 
 				//long initLoadCount = sessions.Statistics.CollectionLoadCount;
 				//long initFetchCount = sessions.Statistics.CollectionFetchCount;

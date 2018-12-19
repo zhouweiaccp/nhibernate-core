@@ -55,7 +55,7 @@ namespace NHibernate.Test.NHSpecificTest.NH2214
 					.AddOrder(Order.Asc("Name"));
 
 				var query = criteria.GetExecutableCriteria(session);
-				var result = query.List();
+				var result = query.List<string>();
 
 				Assert.That(result[0], Is.EqualTo("Name2"));
 				Assert.That(result[1], Is.EqualTo("Name3"));
@@ -79,7 +79,7 @@ namespace NHibernate.Test.NHSpecificTest.NH2214
 
 				var query = criteria.GetExecutableCriteria(session);
 
-				Assert.Throws<HibernateException>(() => query.List());
+				Assert.Throws<HibernateException>(() => query.List<string>());
 			}
 		}
 

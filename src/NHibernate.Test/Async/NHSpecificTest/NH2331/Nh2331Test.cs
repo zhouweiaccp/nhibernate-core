@@ -150,7 +150,7 @@ namespace NHibernate.Test.NHSpecificTest.NH2331
 					;
 
 				ICriteria criteria = personCriteria.GetExecutableCriteria(session);
-				Assert.That(() => criteria.ListAsync(), Throws.Nothing);
+				Assert.That(() => criteria.ListAsync<Bar>(), Throws.Nothing);
 			}
 		}
 	}

@@ -166,10 +166,10 @@ namespace NHibernate.Test.SecondLevelCacheTests
 		{
 			using (ISession session = OpenSession())
 			{
-				IList list = await (session.CreateCriteria(typeof(AnotherItem))
+				var list = await (session.CreateCriteria(typeof(AnotherItem))
 					.Add(Expression.Gt("Id", 2))
 					.SetCacheable(true)
-					.ListAsync());
+					.ListAsync<AnotherItem>());
 				Assert.AreEqual(3, list.Count);
 
 				using (var cmd = session.Connection.CreateCommand())
@@ -182,10 +182,10 @@ namespace NHibernate.Test.SecondLevelCacheTests
 			using (ISession session = OpenSession())
 			{
 				//should bring from cache
-				IList list = await (session.CreateCriteria(typeof(AnotherItem))
+				var list = await (session.CreateCriteria(typeof(AnotherItem))
 					.Add(Expression.Gt("Id", 2))
 					.SetCacheable(true)
-					.ListAsync());
+					.ListAsync<AnotherItem>());
 				Assert.AreEqual(3, list.Count);
 			}
 		}
@@ -195,10 +195,10 @@ namespace NHibernate.Test.SecondLevelCacheTests
 		{
 			using (ISession session = OpenSession())
 			{
-				IList list = await (session.CreateCriteria(typeof(Item))
+				var list = await (session.CreateCriteria(typeof(Item))
 					.Add(Expression.Gt("Id", 2))
 					.SetCacheable(true)
-					.ListAsync());
+					.ListAsync<Item>());
 				Assert.AreEqual(3, list.Count);
 
 				using (var cmd = session.Connection.CreateCommand())
@@ -211,10 +211,10 @@ namespace NHibernate.Test.SecondLevelCacheTests
 			using (ISession session = OpenSession())
 			{
 				//should bring from cache
-				IList list = await (session.CreateCriteria(typeof(Item))
+				var list = await (session.CreateCriteria(typeof(Item))
 					.Add(Expression.Gt("Id", 2))
 					.SetCacheable(true)
-					.ListAsync());
+					.ListAsync<Item>());
 				Assert.AreEqual(3, list.Count);
 			}
 		}

@@ -199,7 +199,7 @@ namespace NHibernate.Test.Stateless
 			{
 				ICriteria criteria = null;
 				Assert.That(() => criteria = dc.GetExecutableCriteria(ss), Throws.Nothing);
-				Assert.That(() => criteria.ListAsync(), Throws.Nothing);
+				Assert.That(() => criteria.ListAsync<Paper>(), Throws.Nothing);
 			}
 		}
 	}

@@ -216,7 +216,7 @@ namespace NHibernate.Test.TypesTest
 				var aaItems =
 					s.CreateCriteria<StringClass>()
 					 .Add(Restrictions.Like("StringValue", "%AAAAAAAAA%"))
-					 .List();
+					 .List<StringClass>();
 
 				Assert.That(aaItems.Count, Is.EqualTo(2));
 			}
@@ -260,7 +260,7 @@ namespace NHibernate.Test.TypesTest
 				var aaItems =
 					s.CreateCriteria<StringClass>()
 					 .Add(Restrictions.Eq("StringValue", "AAAAAAAAABx"))
-					 .List();
+					 .List<StringClass>();
 
 				Assert.That(aaItems.Count, Is.EqualTo(0));
 			}

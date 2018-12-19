@@ -8,7 +8,6 @@
 //------------------------------------------------------------------------------
 
 
-using System.Collections;
 using NHibernate.Criterion;
 using NHibernate.DomainModel.NHSpecific;
 using NUnit.Framework;
@@ -51,13 +50,13 @@ namespace NHibernate.Test.NHSpecificTest
 			ISession s2 = OpenSession();
 			ITransaction t2 = s2.BeginTransaction();
 
-			IList results2 = await (s2.CreateCriteria(typeof(UnsavedType))
+			var results2 = await (s2.CreateCriteria(typeof(UnsavedType))
 				.Add(Expression.Eq("Id", unsavedToSave.Id))
-				.ListAsync());
+				.ListAsync<UnsavedType>());
 
 			Assert.AreEqual(1, results2.Count, "Should have found a match for the new Id");
 
-			UnsavedType unsavedToUpdate = (UnsavedType) results2[0];
+			UnsavedType unsavedToUpdate = results2[0];
 
 			// make sure it has the same Id
 			Assert.AreEqual(unsavedToSave.Id, unsavedToUpdate.Id, "Should have the same Id");
@@ -86,11 +85,11 @@ namespace NHibernate.Test.NHSpecificTest
 			ISession s4 = OpenSession();
 			ITransaction t4 = s4.BeginTransaction();
 
-			IList results4 = await (s4.CreateCriteria(typeof(UnsavedType)).ListAsync());
+			var results4 = await (s4.CreateCriteria(typeof(UnsavedType)).ListAsync<UnsavedType>());
 			Assert.AreEqual(1, results4.Count, "Should only be one item");
 
 			// lets make sure the object was updated
-			UnsavedType unsavedToDelete = (UnsavedType) results4[0];
+			UnsavedType unsavedToDelete = results4[0];
 			Assert.AreEqual(unsavedToUpdate.TypeName, unsavedToDelete.TypeName);
 
 			await (s4.DeleteAsync(unsavedToDelete));

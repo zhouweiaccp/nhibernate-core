@@ -237,7 +237,7 @@ namespace NHibernate.Test.Component.Basic
 				s.CreateQuery("from User u where u.Person.Yob = 1999").List();
 				s.CreateCriteria(typeof(User))
 					.Add(Property.ForName("Person.Yob").Between(1999, 2002))
-					.List();
+					.List<User>();
 				
 				if (Dialect.SupportsRowValueConstructorSyntax) 
 				{

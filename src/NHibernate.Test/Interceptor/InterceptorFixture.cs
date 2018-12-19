@@ -168,7 +168,7 @@ namespace NHibernate.Test.Interceptor
 
 			s = OpenSession();
 			t = s.BeginTransaction();
-			IList logs = s.CreateCriteria(typeof(Log)).List();
+			var logs = s.CreateCriteria(typeof(Log)).List<Log>();
 			Assert.AreEqual(2, logs.Count);
 			s.Delete(u);
 			s.Delete("from Log");

@@ -60,7 +60,7 @@ namespace NHibernate.Test.NHSpecificTest.NH276
 
 			ICriteria c = s.CreateCriteria(typeof(Office));
 			c.Add(Expression.Eq("Location.Id", madison.Id));
-			IList results = c.List();
+			var results = c.List<Office>();
 
 			Assert.AreEqual(2, results.Count, "2 objects");
 			foreach (Office office in results)
@@ -70,7 +70,7 @@ namespace NHibernate.Test.NHSpecificTest.NH276
 
 			c = s.CreateCriteria(typeof(Office));
 			c.Add(Expression.Eq("Location.Id", college.Id));
-			results = c.List();
+			results = c.List<Office>();
 
 			Assert.AreEqual(1, results.Count, "1 objects");
 			foreach (Office office in results)

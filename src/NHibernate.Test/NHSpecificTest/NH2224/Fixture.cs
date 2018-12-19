@@ -50,8 +50,8 @@ namespace NHibernate.Test.NHSpecificTest.NH2224
 						Projections.Property("DateOfChange")),
 						new string[] { "2010", DateTime.Now.Year.ToString() }));
 
-				var result = criteria.List();
-				
+				var result = criteria.List<Class1>();
+
 				Assert.That(result.Count, Is.EqualTo(1));
 			}
 		}

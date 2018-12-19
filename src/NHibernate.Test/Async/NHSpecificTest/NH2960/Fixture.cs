@@ -65,7 +65,7 @@ namespace NHibernate.Test.NHSpecificTest.NH2960
 			{
 				var result = await (session
 					.CreateCriteria("BarCode")
-					.ListAsync());
+					.ListAsync<Entity>());
 				Assert.AreEqual(1, result.Count);
 			}
 		}
@@ -91,7 +91,7 @@ namespace NHibernate.Test.NHSpecificTest.NH2960
 			{
 				var result = await (session
 					.CreateCriteria(typeof(Entity))
-					.ListAsync());
+					.ListAsync<Entity>());
 				Assert.AreEqual(2, result.Count);
 			}
 		}

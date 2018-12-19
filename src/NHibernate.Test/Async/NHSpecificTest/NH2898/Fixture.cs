@@ -66,7 +66,7 @@ namespace NHibernate.Test.NHSpecificTest.NH2898
 				var list = await (session.CreateCriteria(typeof (ItemWithLazyProperty))
 					.Add(Restrictions.Gt("Id", 2))
 					.SetCacheable(true)
-					.ListAsync());
+					.ListAsync<ItemWithLazyProperty>());
 				Assert.AreEqual(3, list.Count);
 
 				using (var cmd = session.Connection.CreateCommand())
@@ -82,7 +82,7 @@ namespace NHibernate.Test.NHSpecificTest.NH2898
 				var list = await (session.CreateCriteria(typeof (ItemWithLazyProperty))
 					.Add(Restrictions.Gt("Id", 2))
 					.SetCacheable(true)
-					.ListAsync());
+					.ListAsync<ItemWithLazyProperty>());
 				Assert.AreEqual(3, list.Count);
 			}
 		}

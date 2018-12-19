@@ -45,7 +45,7 @@ namespace NHibernate.Test.ExpressionTest
 				ICriteria crit = s.CreateCriteria(typeof(Componentizable));
 				Example ex = Example.Create(master).EnableLike();
 				crit.Add(ex);
-				IList result = await (crit.ListAsync());
+				var result = await (crit.ListAsync<Componentizable>());
 				Assert.IsNotNull(result);
 				Assert.AreEqual(1, result.Count);
 				await (t.CommitAsync());
@@ -61,7 +61,7 @@ namespace NHibernate.Test.ExpressionTest
 				ICriteria crit = s.CreateCriteria(typeof(Componentizable));
 				Example ex = Example.Create(master).EnableLike(MatchMode.Start);
 				crit.Add(ex);
-				IList result = await (crit.ListAsync());
+				var result = await (crit.ListAsync<Componentizable>());
 				Assert.IsNotNull(result);
 				Assert.AreEqual(1, result.Count);
 				await (t.CommitAsync());
@@ -77,7 +77,7 @@ namespace NHibernate.Test.ExpressionTest
 				ICriteria crit = s.CreateCriteria(typeof(Componentizable));
 				Example ex = Example.Create(master).EnableLike(MatchMode.End);
 				crit.Add(ex);
-				IList result = await (crit.ListAsync());
+				var result = await (crit.ListAsync<Componentizable>());
 				Assert.IsNotNull(result);
 				Assert.AreEqual(1, result.Count);
 				await (t.CommitAsync());
@@ -93,7 +93,7 @@ namespace NHibernate.Test.ExpressionTest
 				ICriteria crit = s.CreateCriteria(typeof(Componentizable));
 				Example ex = Example.Create(master).EnableLike(MatchMode.Anywhere);
 				crit.Add(ex);
-				IList result = await (crit.ListAsync());
+				var result = await (crit.ListAsync<Componentizable>());
 				Assert.IsNotNull(result);
 				Assert.AreEqual(3, result.Count);
 				await (t.CommitAsync());
@@ -113,7 +113,7 @@ namespace NHibernate.Test.ExpressionTest
 
 				crit.Add(Expression.Or(Expression.Not(ex), ex));
 
-				IList result = await (crit.ListAsync());
+				var result = await (crit.ListAsync<Componentizable>());
 				Assert.IsNotNull(result);
 				//if ( !(dialect is HSQLDialect - h2.1 test
 
@@ -133,7 +133,7 @@ namespace NHibernate.Test.ExpressionTest
 				Example ex = Example.Create(master).EnableLike()
 					.ExcludeProperty("Component.SubComponent");
 				crit.Add(ex);
-				IList result = await (crit.ListAsync());
+				var result = await (crit.ListAsync<Componentizable>());
 				Assert.IsNotNull(result);
 				Assert.AreEqual(3, result.Count);
 
@@ -142,7 +142,7 @@ namespace NHibernate.Test.ExpressionTest
 				ex = Example.Create(master).EnableLike()
 					.ExcludeProperty("Component.SubComponent.SubName1");
 				crit.Add(ex);
-				result = await (crit.ListAsync());
+				result = await (crit.ListAsync<Componentizable>());
 				Assert.IsNotNull(result);
 				Assert.AreEqual(1, result.Count);
 				await (t.CommitAsync());

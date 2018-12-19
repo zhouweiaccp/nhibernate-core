@@ -98,7 +98,7 @@ namespace NHibernate.Test.Stateless
 
 			using (IStatelessSession s = Sfi.OpenStatelessSession())
 			{
-				Assert.AreEqual(1, (await (s.CreateCriteria<Contact>().ListAsync())).Count);
+				Assert.AreEqual(1, (await (s.CreateCriteria<Contact>().ListAsync<Contact>())).Count);
 			}
 
 			await (testData.cleanDataAsync());
@@ -112,7 +112,7 @@ namespace NHibernate.Test.Stateless
 
 			using (IStatelessSession s = Sfi.OpenStatelessSession())
 			{
-				Assert.AreEqual(1, (await (s.CreateCriteria<Contact>().Fetch(SelectMode.Skip, "Org").ListAsync())).Count);
+				Assert.AreEqual(1, (await (s.CreateCriteria<Contact>().Fetch(SelectMode.Skip, "Org").ListAsync<Contact>())).Count);
 			}
 
 			await (testData.cleanDataAsync());

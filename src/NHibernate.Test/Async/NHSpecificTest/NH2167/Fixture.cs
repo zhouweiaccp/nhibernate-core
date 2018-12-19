@@ -88,7 +88,7 @@ namespace NHibernate.Test.NHSpecificTest.NH2167
 							Projections.Constant(0),
 							Projections.Constant(1))));
 
-				await (projection.ListAsync());
+				await (projection.ListAsync<string>());
 			}
 		}
 	}

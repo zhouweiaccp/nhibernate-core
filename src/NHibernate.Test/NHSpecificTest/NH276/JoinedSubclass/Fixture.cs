@@ -49,14 +49,14 @@ namespace NHibernate.Test.NHSpecificTest.NH276.JoinedSubclass
 			ICriteria c = s.CreateCriteria(typeof(Request));
 			c.Add(Expression.Eq("Status.StatusId", 1));
 			c.Add(Expression.Eq("Office.OrganizationId", 1));
-			IList list = c.List();
+			var list = c.List<Request>();
 
 			Assert.AreEqual(0, list.Count, "should contain no results");
 
 			c = s.CreateCriteria(typeof(Request));
 			c.Add(Expression.Eq("Status.StatusId", 4));
 			c.Add(Expression.Eq("Office.OrganizationId", 5));
-			list = c.List();
+			list = c.List<Request>();
 
 			Assert.AreEqual(1, list.Count, "one matching result");
 

@@ -72,7 +72,7 @@ namespace NHibernate.Test.NHSpecificTest.NH1688
 
 				action.Invoke(criteria);
 
-				IList l = await (criteria.GetExecutableCriteria(session).ListAsync(cancellationToken));
+				var l = await (criteria.GetExecutableCriteria(session).ListAsync<NH1679.DomainClass>(cancellationToken));
 				Assert.AreNotEqual(l, null);
 			}
 		}

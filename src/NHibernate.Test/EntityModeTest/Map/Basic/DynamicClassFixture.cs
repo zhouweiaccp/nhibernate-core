@@ -24,6 +24,7 @@ namespace NHibernate.Test.EntityModeTest.Map.Basic
 
 		public delegate IDictionary SingleCarQueryDelegate(ISession session);
 		public delegate IList AllModelQueryDelegate(ISession session);
+		public delegate IList<IDictionary<string, object>> TypedAllModelQueryDelegate(ISession session);
 
 		[Test]
 		public void ShouldWorkWithHQL()
@@ -38,10 +39,20 @@ namespace NHibernate.Test.EntityModeTest.Map.Basic
 		{
 			TestLazyDynamicClass(
 				s => (IDictionary) s.CreateCriteria("ProductLine").AddOrder(Order.Asc("Description")).UniqueResult(),
-				s => s.CreateCriteria("Model").List());
+				s => s.CreateCriteria("Model").List<IDictionary<string, object>>());
 		}
 
-		public void TestLazyDynamicClass(SingleCarQueryDelegate singleCarQueryHandler, AllModelQueryDelegate allModelQueryHandler)
+		public void TestLazyDynamicClass(
+			SingleCarQueryDelegate singleCarQueryHandler,
+			AllModelQueryDelegate allModelQueryHandler)
+		{
+			TestLazyDynamicClass(
+				singleCarQueryHandler,
+				s => (IList<IDictionary<string, object>>) allModelQueryHandler(s)
+				                                          .Cast<IDictionary<string, object>>().ToList());
+		}
+
+		public void TestLazyDynamicClass(SingleCarQueryDelegate singleCarQueryHandler, TypedAllModelQueryDelegate allModelQueryHandler)
 		{
 			ITransaction t;
 			IDictionary cars;
@@ -80,12 +91,12 @@ namespace NHibernate.Test.EntityModeTest.Map.Basic
 				Assert.AreEqual(2, models.Count);
 				Assert.IsTrue(NHibernateUtil.IsInitialized(models));
 				s.Clear();
-				IList list = allModelQueryHandler(s);
-				foreach (IDictionary ht in list)
+				var list = allModelQueryHandler(s);
+				foreach (var ht in list)
 				{
 					Assert.IsFalse(NHibernateUtil.IsInitialized(ht["ProductLine"]));
 				}
-				var model = (IDictionary)list[0];
+				var model = list[0];
 				Assert.IsTrue(((IList)((IDictionary)model["ProductLine"])["Models"]).Contains(model));
 				s.Clear();
 

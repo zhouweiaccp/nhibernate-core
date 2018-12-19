@@ -238,9 +238,9 @@ namespace NHibernate.Test.JoinedSubclass
 			s = OpenSession();
 			t = s.BeginTransaction();
 
-			IList results = s.CreateCriteria(typeof(Person))
+			var results = s.CreateCriteria(typeof(Person))
 				.Add(Expression.In("Name", new string[] {"Did it get updated", "Updated Employee String"}))
-				.List();
+				.List<Person>();
 
 			Assert.AreEqual(2, results.Count);
 

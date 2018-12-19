@@ -96,7 +96,7 @@ namespace NHibernate.Test.ProjectionFixtures
 			    using (var tx = s.BeginTransaction())
 			    {
 				    var criteria = projection.GetExecutableCriteria(s);
-				    criteria.List();
+				    criteria.List<object[]>();
 
 				    tx.Commit();
 			    }
@@ -126,9 +126,9 @@ namespace NHibernate.Test.ProjectionFixtures
             using(var tx = s.BeginTransaction())
             {
                 var criteria = projection.GetExecutableCriteria(s);
-                var list = criteria.List();
+                var list = criteria.List<object[]>();
                 Assert.AreEqual(1, list.Count);
-                var tuple = (object[]) list[0];
+                var tuple = list[0];
                 Assert.AreEqual(11, tuple[0]);
                 Assert.AreEqual(2, tuple[1]);
                 Assert.AreEqual(1, tuple[2]);
@@ -156,7 +156,7 @@ namespace NHibernate.Test.ProjectionFixtures
                 criteria.AddOrder(Order.Asc(Projections.SubQuery(currentAssessment)))
                     .SetMaxResults(1000);
 
-                criteria.List();
+                criteria.List<TreeNode>();
             }
         }
 
@@ -179,7 +179,7 @@ namespace NHibernate.Test.ProjectionFixtures
                 criteria.AddOrder(Order.Asc(Projections.SubQuery(currentAssessment)))
                     .SetMaxResults(1000);
 
-                criteria.List();
+                criteria.List<TreeNode>();
             }
         }
     }

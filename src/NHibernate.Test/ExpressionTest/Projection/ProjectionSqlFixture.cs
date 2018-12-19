@@ -81,11 +81,9 @@ namespace NHibernate.Test.ExpressionTest.Projection
                     .Add(Projections.Max("Pay"))
                     .Add(Projections.Min("Pay")))
                     ;
-                IList result = c.List();// c.UniqueResult();
+                var result = c.List<object[]>();// c.UniqueResult();
                 Assert.IsTrue(result.Count == 1, "More than one record was found, while just one was expected");
-                Assert.IsTrue(result[0] is object[], 
-                    "expected object[] as result, but found " + result[0].GetType().Name);
-                object[] results = (object[])result[0];
+                object[] results = result[0];
                 Assert.AreEqual(results.Length, 3);
                 Assert.AreEqual(results[0], 2.5);
                 Assert.AreEqual(results[1], 4);
@@ -105,7 +103,7 @@ namespace NHibernate.Test.ExpressionTest.Projection
                     new string[] { "MyPay" },
                     new IType[] { NHibernateUtil.Double })));
 
-                IList result = c.List();// c.UniqueResult();
+                var result = c.List<double>();// c.UniqueResult();
                 Assert.IsTrue(result.Count == 1);
                 object results = result[0];
                 Assert.AreEqual(results, 2.5);

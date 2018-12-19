@@ -77,7 +77,7 @@ namespace NHibernate.Test.Legacy
 
 				int none = s.CreateCriteria(typeof(Fum))
 					.Add(Expression.In("FumString", Array.Empty<string>()))
-					.List().Count;
+					.List<Fum>().Count;
 				Assert.AreEqual(0, none);
 
 				s.Delete(b);
@@ -112,7 +112,7 @@ namespace NHibernate.Test.Legacy
 					.Add(Expression.IsNotNull("FumString"));
 				baseCriteria.CreateCriteria("Friends")
 					.Add(Expression.Like("FumString", "g%"));
-				IList list = baseCriteria.List();
+				var list = baseCriteria.List<Fum>();
 
 				Assert.AreEqual(1, list.Count);
 				Assert.AreSame(fum, list[0]);
@@ -137,7 +137,7 @@ namespace NHibernate.Test.Legacy
 					.Fetch("Friends");
 				baseCriteria.CreateCriteria("Fo", "fo")
 					.Add(Expression.Eq("FumString", fum.Fo.FumString));
-				map = (IDictionary) baseCriteria.List()[0];
+				map = baseCriteria.List<IDictionary>()[0];
 
 				Assert.AreSame(fum, map["this"]);
 				Assert.AreSame(fum.Fo, map["fo"]);
@@ -151,7 +151,7 @@ namespace NHibernate.Test.Legacy
 					.Add(Expression.IsNotNull("fo.FumString"))
 					.Add(Expression.Like("fr.FumString", "g%"))
 					.Add(Expression.EqProperty("fr.id.Short", "id.Short"))
-					.List();
+					.List<Fum>();
 				Assert.AreEqual(1, list.Count);
 				Assert.AreSame(fum, list[0]);
 				txn.Commit();
@@ -166,7 +166,7 @@ namespace NHibernate.Test.Legacy
 					.Add(Expression.IsNotNull("FumString"));
 				baseCriteria.CreateCriteria("Friends")
 					.Add(Expression.Like("FumString", "g%"));
-				Fum fum = (Fum) baseCriteria.List()[0];
+				Fum fum = baseCriteria.List<Fum>()[0];
 				Assert.AreEqual(2, fum.Friends.Count);
 				s.Delete(fum);
 				s.Delete(fum.Fo);

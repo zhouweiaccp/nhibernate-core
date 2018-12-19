@@ -8,7 +8,6 @@
 //------------------------------------------------------------------------------
 
 
-using System.Collections;
 using NUnit.Framework;
 
 namespace NHibernate.Test.NHSpecificTest.NH734
@@ -28,7 +27,7 @@ namespace NHibernate.Test.NHSpecificTest.NH734
 				try
 				{
 					session.BeginTransaction();
-					IList result = await (criteria.ListAsync());
+					await (criteria.ListAsync<MyClass>());
 					await (session.Transaction.CommitAsync());
 				}
 				catch

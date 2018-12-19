@@ -286,13 +286,13 @@ namespace NHibernate.Test.SubselectFetchTest
 				// H3 has this after CreateCriteria("Friends"), but it's not yet supported in NH
 				.CreateCriteria("MoreChildren")
 				.CreateCriteria("Friends")
-				.List();
+				.List<Parent>();
 
-			IList parents = s.CreateCriteria(typeof(Parent))
+			var parents = s.CreateCriteria(typeof(Parent))
 				.Fetch("MoreChildren")
 				.Fetch("MoreChildren.Friends")
 				.AddOrder(Order.Desc("Name"))
-				.List();
+				.List<Parent>();
 
 			s.Delete(parents[0]);
 			s.Delete(parents[1]);
@@ -323,12 +323,12 @@ namespace NHibernate.Test.SubselectFetchTest
 
 			Sfi.Statistics.Clear();
 
-			IList parents = s.CreateCriteria(typeof(Parent))
+			var parents = s.CreateCriteria(typeof(Parent))
 				.Add(Expression.Between("Name", "bar", "foo"))
 				.AddOrder(Order.Desc("Name"))
-				.List();
-			p = (Parent) parents[0];
-			q = (Parent) parents[1];
+				.List<Parent>();
+			p = parents[0];
+			q = parents[1];
 
 			Assert.IsFalse(NHibernateUtil.IsInitialized(p.Children));
 			Assert.IsFalse(NHibernateUtil.IsInitialized(q.Children));

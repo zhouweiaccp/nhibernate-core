@@ -8,16 +8,11 @@
 //------------------------------------------------------------------------------
 
 
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using NHibernate.Cfg;
-using NHibernate.Dialect;
 using NHibernate.Criterion;
 using NHibernate.Proxy;
-using NHibernate.SqlCommand;
-using NHibernate.Transform;
-using NHibernate.Type;
 using NHibernate.Util;
 using NUnit.Framework;
 
@@ -1145,16 +1140,16 @@ namespace NHibernate.Test.ReadOnly
 			using (ISession s = OpenSession())
 			using (ITransaction t = s.BeginTransaction())
 			{
-				IList result = await (dc.GetExecutableCriteria(s)
+				var result = await (dc.GetExecutableCriteria(s)
 					.SetMaxResults(3)
 					.SetReadOnly(true)
-					.ListAsync());
-				
+					.ListAsync<Student>());
+
 				Assert.That(result.Count, Is.EqualTo(2));
-				
-				Student gavin = (Student)result[0];
-				Student bizarroGavin = (Student)result[1];
-				
+
+				Student gavin = result[0];
+				Student bizarroGavin = result[1];
+
 				Assert.That(gavin.StudentNumber, Is.EqualTo(232));
 				Assert.That(bizarroGavin.StudentNumber, Is.EqualTo(666));
 				
@@ -1213,27 +1208,27 @@ namespace NHibernate.Test.ReadOnly
 
 			s = OpenSession();
 			t = s.BeginTransaction();
-			
-			IList list = await (s.CreateCriteria<Enrolment>()
+
+			var list = await (s.CreateCriteria<Enrolment>()
 				.CreateAlias("Student", "s")
 				.CreateAlias("Course", "c")
 				.Add(Restrictions.IsNotEmpty("s.Enrolments"))
 				.SetCacheable(true)
 				.SetReadOnly(true)
-				.ListAsync());
-			
+				.ListAsync<Enrolment>());
+
 			Assert.That(list.Count, Is.EqualTo(2));
 
-			Enrolment e = (Enrolment)list[0];
+			Enrolment e = list[0];
 			if (e.Student.StudentNumber == xam.StudentNumber)
 			{
 				enrolment1 = e;
-				enrolment2 = (Enrolment)list[1];
+				enrolment2 = list[1];
 			}
 			else if (e.Student.StudentNumber == gavin.StudentNumber)
 			{
 				enrolment2 = e;
-				enrolment1 = (Enrolment)list[1];
+				enrolment1 = list[1];
 			}
 			else
 			{
@@ -1261,19 +1256,19 @@ namespace NHibernate.Test.ReadOnly
 				.Add(Restrictions.IsNotEmpty("s.Enrolments"))
 				.SetCacheable(true)
 				.SetReadOnly(true)
-				.ListAsync());
-		
+				.ListAsync<Enrolment>());
+
 			Assert.That(list.Count, Is.EqualTo(2));
 
-			e = (Enrolment)list[0];
+			e = list[0];
 			if (e.Student.StudentNumber == xam.StudentNumber)
 			{
 				enrolment1 = e;
-				enrolment2 = (Enrolment)list[1];
+				enrolment2 = list[1];
 			}
 			else if (e.Student.StudentNumber == gavin.StudentNumber) {
 				enrolment2 = e;
-				enrolment1 = (Enrolment)list[1];
+				enrolment1 = list[1];
 			}
 			else
 			{
@@ -1300,20 +1295,20 @@ namespace NHibernate.Test.ReadOnly
 				.CreateAlias("Course", "c")
 				.Add(Restrictions.IsNotEmpty("s.Enrolments"))
 				.SetCacheable(true)
-				.ListAsync());
-			
+				.ListAsync<Enrolment>());
+
 			Assert.That(list.Count, Is.EqualTo(2));
 
-			e = (Enrolment)list[0];
+			e = list[0];
 			if (e.Student.StudentNumber == xam.StudentNumber)
 			{
 				enrolment1 = e;
-				enrolment2 = (Enrolment)list[1];
+				enrolment2 = list[1];
 			}
 			else if (e.Student.StudentNumber == gavin.StudentNumber)
 			{
 				enrolment2 = e;
-				enrolment1 = (Enrolment)list[1];
+				enrolment1 = list[1];
 			}
 			else
 			{

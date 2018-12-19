@@ -56,11 +56,11 @@ namespace NHibernate.Test.Pagination
 				size = s.CreateQuery("from DataPoint dp order by dp.X, dp.Y").SetFirstResult(5).SetMaxResults(2).List().Count;
 				Assert.That(size, Is.EqualTo(2));
 				size =
-					s.CreateCriteria(typeof (DataPoint)).AddOrder(Order.Asc("X")).AddOrder(Order.Asc("Y")).SetFirstResult(8).List().
+					s.CreateCriteria(typeof (DataPoint)).AddOrder(Order.Asc("X")).AddOrder(Order.Asc("Y")).SetFirstResult(8).List<DataPoint>().
 						Count;
 				Assert.That(size, Is.EqualTo(2));
 				size =
-					s.CreateCriteria(typeof(DataPoint)).AddOrder(Order.Asc("X")).AddOrder(Order.Asc("Y")).SetMaxResults(10).SetFirstResult(8).List().
+					s.CreateCriteria(typeof(DataPoint)).AddOrder(Order.Asc("X")).AddOrder(Order.Asc("Y")).SetMaxResults(10).SetFirstResult(8).List<DataPoint>().
 						Count;
 				Assert.That(size, Is.EqualTo(2));
 				t.Commit();

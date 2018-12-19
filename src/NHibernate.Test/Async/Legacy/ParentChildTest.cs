@@ -238,11 +238,11 @@ namespace NHibernate.Test.Legacy
 				.Add(Expression.Eq("String", "a string"))
 				.SetLockMode(lockMode);
 
-			IList list = await (crit.ListAsync());
+			var list = await (crit.ListAsync<Baz>());
 			Assert.AreEqual(2, list.Count);
 
-			await (s.CreateCriteria(typeof(Glarch)).SetLockMode(LockMode.Upgrade).ListAsync());
-			await (s.CreateCriteria(typeof(Glarch)).SetLockMode(CriteriaSpecification.RootAlias, LockMode.Upgrade).ListAsync());
+			await (s.CreateCriteria(typeof(Glarch)).SetLockMode(LockMode.Upgrade).ListAsync<Glarch>());
+			await (s.CreateCriteria(typeof(Glarch)).SetLockMode(CriteriaSpecification.RootAlias, LockMode.Upgrade).ListAsync<Glarch>());
 
 			g2.Name = null;
 			await (t.CommitAsync());
@@ -257,7 +257,7 @@ namespace NHibernate.Test.Legacy
 				.Add(Expression.Gt("X", -666));
 			crit.CreateCriteria("FooSet")
 				.Add(Expression.IsNull("Null"));
-			list = await (crit.ListAsync());
+			list = await (crit.ListAsync<Baz>());
 
 			Assert.AreEqual(4, list.Count);
 			baz = (Baz) await (crit.UniqueResultAsync());
@@ -275,7 +275,7 @@ namespace NHibernate.Test.Legacy
 				.CreateCriteria("TheFoo")
 				.CreateCriteria("Component.Glarch")
 				.Add(Expression.Eq("Name", "xxx"))
-				.ListAsync());
+				.ListAsync<Baz>());
 			Assert.AreEqual(0, list.Count);
 
 			list = await (s.CreateCriteria(typeof(Baz))
@@ -285,7 +285,7 @@ namespace NHibernate.Test.Legacy
 				.Add(Expression.IsNull("foo2.Component.Glarch"))
 				.CreateCriteria("foo2.Component.Glarch")
 				.Add(Expression.Eq("Name", "xxx"))
-				.ListAsync());
+				.ListAsync<Baz>());
 			Assert.AreEqual(0, list.Count);
 
 			await (t.CommitAsync());
@@ -300,7 +300,7 @@ namespace NHibernate.Test.Legacy
 			crit.CreateCriteria("FooSet")
 				.Add(Expression.IsNull("Null"));
 
-			list = await (crit.ListAsync());
+			list = await (crit.ListAsync<Baz>());
 			Assert.AreEqual(2, list.Count);
 			baz = (Baz) await (crit.UniqueResultAsync());
 			Assert.IsTrue(NHibernateUtil.IsInitialized(baz.TopGlarchez)); //cos it is nonlazy
@@ -335,12 +335,12 @@ namespace NHibernate.Test.Legacy
 
 			s = OpenSession();
 			t = s.BeginTransaction();
-			Assert.AreEqual(1, (await (s.CreateCriteria(typeof(Part)).ListAsync())).Count);
+			Assert.AreEqual(1, (await (s.CreateCriteria(typeof(Part)).ListAsync<Part>())).Count);
 			//there is a where condition on Part mapping
 			Assert.AreEqual(1,
 			                (await (s.CreateCriteria(typeof(Part))
 			                	.Add(Expression.Eq("Id", p1.Id))
-			                	.ListAsync())).Count);
+			                	.ListAsync<Part>())).Count);
 			Assert.AreEqual(1, (await (s.CreateQuery("from Part").ListAsync())).Count);
 			Assert.AreEqual(2, (await (s.CreateQuery("from Baz baz join baz.Parts").ListAsync())).Count);
 

@@ -1,4 +1,3 @@
-using System.Collections;
 using NHibernate.Criterion;
 using NHibernate.DomainModel.NHSpecific;
 using NUnit.Framework;
@@ -52,9 +51,9 @@ namespace NHibernate.Test.NHSpecificTest
 			ISession s2 = OpenSession();
 			ITransaction t2 = s2.BeginTransaction();
 
-			Node startNode2 = (Node) s2.CreateCriteria(typeof(Node))
+			Node startNode2 = s2.CreateCriteria(typeof(Node))
 			                         	.Add(Expression.Eq("Id", "start"))
-			                         	.List()[0];
+			                         	.List<Node>()[0];
 
 			Assert.AreEqual(1, startNode2.DestinationNodes.Count, "Start Node goes to 1 Node");
 			Assert.AreEqual(0, startNode2.PreviousNodes.Count, "Start Node has no previous Nodes");

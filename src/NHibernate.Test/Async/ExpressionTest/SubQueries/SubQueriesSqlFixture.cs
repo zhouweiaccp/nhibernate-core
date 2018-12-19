@@ -91,9 +91,9 @@ namespace NHibernate.Test.ExpressionTest.SubQueries
 
 			using (ISession s = Sfi.OpenSession())
 			{
-				IList list = await (s.CreateCriteria(typeof(Blog), "blog")
+				var list = await (s.CreateCriteria(typeof(Blog), "blog")
 					.Add(Subqueries.Exists(dc))
-					.ListAsync());
+					.ListAsync<Blog>());
 				Assert.AreEqual(1, list.Count);
 			}
 		}
@@ -111,7 +111,7 @@ namespace NHibernate.Test.ExpressionTest.SubQueries
 				DetachedCriteria dc = DetachedCriteria.For(typeof(Blog))
 					.CreateCriteria("Posts", "post")
 					.Add(Subqueries.Exists(comment));
-				IList list = await (dc.GetExecutableCriteria(s).ListAsync());
+				var list = await (dc.GetExecutableCriteria(s).ListAsync<Blog>());
 				Assert.AreEqual(1, list.Count);
 			}
 		}

@@ -1,4 +1,3 @@
-using System.Collections;
 using NHibernate.Criterion;
 using NUnit.Framework;
 
@@ -31,10 +30,10 @@ namespace NHibernate.Test.NHSpecificTest.NH830
 			son.Parents.Add(mum);
 
 			//Use criteria API to search first 
-			IList result = sess.CreateCriteria(typeof (Cat))
+			var result = sess.CreateCriteria(typeof (Cat))
 				.CreateAlias("Children", "child")
 				.Add(Expression.Eq("child.Id", son.Id))
-				.List();
+				.List<Cat>();
 			//the criteria failed to find the mum cat with the child
 			Assert.AreEqual(1, result.Count);
 

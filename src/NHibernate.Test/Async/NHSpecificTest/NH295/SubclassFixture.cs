@@ -8,7 +8,6 @@
 //------------------------------------------------------------------------------
 
 
-using System.Collections;
 using NHibernate.Criterion;
 using NUnit.Framework;
 
@@ -76,7 +75,7 @@ namespace NHibernate.Test.NHSpecificTest.NH295
 			//Load user with USER NAME: 
 			ICriteria criteria1 = s.CreateCriteria(typeof(User));
 			criteria1.Add(Expression.Eq("Name", "User1"));
-			Assert.AreEqual(1, (await (criteria1.ListAsync())).Count);
+			Assert.AreEqual(1, (await (criteria1.ListAsync<User>())).Count);
 			await (s.Transaction.CommitAsync());
 			s.Close();
 
@@ -85,7 +84,7 @@ namespace NHibernate.Test.NHSpecificTest.NH295
 			//Load group with USER NAME: 
 			ICriteria criteria2 = s.CreateCriteria(typeof(UserGroup));
 			criteria2.Add(Expression.Eq("Name", "User1"));
-			Assert.AreEqual(0, (await (criteria2.ListAsync())).Count);
+			Assert.AreEqual(0, (await (criteria2.ListAsync<UserGroup>())).Count);
 			await (s.Transaction.CommitAsync());
 			s.Close();
 
@@ -94,7 +93,7 @@ namespace NHibernate.Test.NHSpecificTest.NH295
 			//Load group with GROUP NAME
 			ICriteria criteria3 = s.CreateCriteria(typeof(UserGroup));
 			criteria3.Add(Expression.Eq("Name", "Group1"));
-			Assert.AreEqual(1, (await (criteria3.ListAsync())).Count);
+			Assert.AreEqual(1, (await (criteria3.ListAsync<UserGroup>())).Count);
 			await (s.Transaction.CommitAsync());
 			s.Close();
 
@@ -103,7 +102,7 @@ namespace NHibernate.Test.NHSpecificTest.NH295
 			//Load user with GROUP NAME
 			ICriteria criteria4 = s.CreateCriteria(typeof(User));
 			criteria4.Add(Expression.Eq("Name", "Group1"));
-			Assert.AreEqual(0, (await (criteria4.ListAsync())).Count);
+			Assert.AreEqual(0, (await (criteria4.ListAsync<User>())).Count);
 			await (s.Transaction.CommitAsync());
 			s.Close();
 
@@ -154,7 +153,7 @@ namespace NHibernate.Test.NHSpecificTest.NH295
 				await (s.SaveAsync(group));
 				await (s.SaveAsync(user));
 
-				await (s.CreateCriteria(typeof(Party)).ListAsync());
+				await (s.CreateCriteria(typeof(Party)).ListAsync<Party>());
 
 				await (s.DeleteAsync("from Party"));
 				await (t.CommitAsync());
