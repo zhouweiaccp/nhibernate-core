@@ -41,7 +41,7 @@ namespace NHibernate.Test.NHSpecificTest.NH1877
 				var crit = session.CreateCriteria(typeof (Person))
 					.SetProjection(Projections.GroupProperty("BirthDate"),
 					               Projections.Count("Id"));
-				var result = crit.List();
+				var result = crit.List<object[]>();
 				Assert.That(result,Has.Count.EqualTo(5));
 			}
 		}

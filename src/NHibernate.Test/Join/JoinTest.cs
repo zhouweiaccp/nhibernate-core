@@ -369,10 +369,10 @@ namespace NHibernate.Test.Join
 
 				ICriteria criteria = s.CreateCriteria(typeof (Person))
 					.Add(Expression.Eq("Name", people[1].Name));
-				IList list = criteria.List();
+				var list = criteria.List<Person>();
 
 				Assert.AreEqual(1, list.Count);
-				Assert.IsTrue(PersonsAreEqual(people[1], (Person) list[0]));
+				Assert.IsTrue(PersonsAreEqual(people[1], list[0]));
 
 				tx.Commit();
 			}

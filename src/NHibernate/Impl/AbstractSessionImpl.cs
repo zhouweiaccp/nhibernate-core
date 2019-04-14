@@ -20,6 +20,7 @@ using NHibernate.Multi;
 using NHibernate.Persister.Entity;
 using NHibernate.Transaction;
 using NHibernate.Type;
+using NHibernate.Util;
 
 namespace NHibernate.Impl
 {
@@ -149,26 +150,28 @@ namespace NHibernate.Impl
 			}
 		}
 
+		//TODO 6.0: Make abstract
 		public virtual IList<T> List<T>(CriteriaImpl criteria)
 		{
 			using (BeginProcess())
 			{
 				var results = new List<T>();
+#pragma warning disable CS0618 // Type or member is obsolete
 				List(criteria, results);
+#pragma warning restore CS0618 // Type or member is obsolete
 				return results;
 			}
 		}
 
+		//Since 5.3
+		[Obsolete("Please use the generic overload yielding a list instead.")]
 		public abstract void List(CriteriaImpl criteria, IList results);
 
+		//Since 5.3
+		[Obsolete("Please use the generic overload instead.")]
 		public virtual IList List(CriteriaImpl criteria)
 		{
-			using (BeginProcess())
-			{
-				var results = new List<object>();
-				List(criteria, results);
-				return results;
-			}
+			return List<object>(criteria).ToIList();
 		}
 
 		public abstract IList ListFilter(object collection, string filter, QueryParameters parameters);

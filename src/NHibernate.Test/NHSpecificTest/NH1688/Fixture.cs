@@ -60,7 +60,7 @@ namespace NHibernate.Test.NHSpecificTest.NH1688
 
 				action.Invoke(criteria);
 
-				IList l = criteria.GetExecutableCriteria(session).List();
+				var l = criteria.GetExecutableCriteria(session).List<NH1679.DomainClass>();
 				Assert.AreNotEqual(l, null);
 			}
 		}

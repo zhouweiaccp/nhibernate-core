@@ -75,7 +75,7 @@ namespace NHibernate.Test.NHSpecificTest.NH3567
 					var numberOfComments =
 						session.CreateCriteria(typeof(Comment))
 							.Add(Subqueries.PropertyIn("Post.Id", subquery))
-							.List().Count;
+							.List<Comment>().Count;
 					Assert.That(numberOfComments, Is.EqualTo(2), "Query with sub-query returned an invalid number of rows.");
 
 					var site = session.Get<Site>(1);
@@ -88,7 +88,7 @@ namespace NHibernate.Test.NHSpecificTest.NH3567
 					numberOfComments =
 						session.CreateCriteria(typeof(Comment))
 							.Add(Subqueries.PropertyIn("Post.Id", subquery))
-							.List().Count;
+							.List<Comment>().Count;
 
 					Assert.That(numberOfComments, Is.EqualTo(2), "Query with sub-query returned an invalid number of rows.");
 

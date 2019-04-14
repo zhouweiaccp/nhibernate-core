@@ -39,5 +39,12 @@ namespace NHibernate.Util
 				method(item);
 			}
 		}
+
+		//Since 5.3. Added temporarily to implement obsolete methods.
+		[Obsolete]
+		internal static IList ToIList<T>(this IEnumerable<T> list)
+		{
+			return list as IList ?? list.ToList();
+		}
 	}
 }

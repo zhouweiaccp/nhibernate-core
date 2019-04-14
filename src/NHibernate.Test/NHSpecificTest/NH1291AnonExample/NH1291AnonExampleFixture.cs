@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using NHibernate.Criterion;
 using NUnit.Framework;
@@ -67,8 +66,8 @@ namespace NHibernate.Test.NHSpecificTest.NH1291AnonExample
 			{
 				using(ITransaction tx = s.BeginTransaction())
 				{
-					IList list = s.CreateCriteria(typeof(Person))
-						.Add(Example.Create(new PersonIQAnon(40))).List();
+					var list = s.CreateCriteria(typeof(Person))
+						.Add(Example.Create(new PersonIQAnon(40))).List<Person>();
 					//c# 3.5: Example.Create( new { IQ = 40 } )
 					Assert.AreEqual(1, list.Count);
 					Assert.AreEqual("Fred", ((Person)list[0]).Name);
@@ -100,8 +99,8 @@ namespace NHibernate.Test.NHSpecificTest.NH1291AnonExample
 			{
 				using(ITransaction tx = s.BeginTransaction())
 				{
-					IList list = s.CreateCriteria(typeof(Person))
-						.Add(Example.Create(new PersonNameAnon("%all%")).EnableLike()).List();
+					var list = s.CreateCriteria(typeof(Person))
+						.Add(Example.Create(new PersonNameAnon("%all%")).EnableLike()).List<Person>();
 					//c# 3.5: Example.Create( new { Name = "%all%" } )
 					Assert.AreEqual(1, list.Count);
 					Assert.AreEqual("Sally", ((Person)list[0]).Name);
@@ -125,11 +124,11 @@ namespace NHibernate.Test.NHSpecificTest.NH1291AnonExample
 					s.Save(h1);
 					s.Save(h2);
 
-					IList list = s.CreateCriteria(typeof(Person)).CreateCriteria("Home")
-						.Add(Example.Create(h1)).List();
+					var list = s.CreateCriteria(typeof(Person)).CreateCriteria("Home")
+						.Add(Example.Create(h1)).List<Person>();
 
 					Assert.AreEqual(1, list.Count);
-					Assert.AreEqual("Joe", ((Person)list[0]).Name);
+					Assert.AreEqual("Joe", list[0].Name);
 					tx.Commit();
 				}
 			}
@@ -166,8 +165,8 @@ namespace NHibernate.Test.NHSpecificTest.NH1291AnonExample
 					s.Save(h1);
 					s.Save(h2);
 
-					IList list = s.CreateCriteria(typeof(Person))
-					    .CreateCriteria("Home").Add(Example.Create(new HomeAnon(97402))).List();
+					var list = s.CreateCriteria(typeof(Person))
+					    .CreateCriteria("Home").Add(Example.Create(new HomeAnon(97402))).List<Person>();
 					//c# 3.5: Example.Create( new { Zip = 97402 } )
 
 					Assert.AreEqual(1, list.Count);

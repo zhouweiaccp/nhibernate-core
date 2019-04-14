@@ -30,6 +30,7 @@ using NHibernate.Multi;
 using NHibernate.Persister.Entity;
 using NHibernate.Transaction;
 using NHibernate.Type;
+using NHibernate.Util;
 
 namespace NHibernate.Impl
 {
@@ -68,28 +69,30 @@ namespace NHibernate.Impl
 			}
 		}
 
+		//TODO 6.0: Make abstract
 		public virtual async Task<IList<T>> ListAsync<T>(CriteriaImpl criteria, CancellationToken cancellationToken)
 		{
 			cancellationToken.ThrowIfCancellationRequested();
 			using (BeginProcess())
 			{
 				var results = new List<T>();
+#pragma warning disable CS0618 // Type or member is obsolete
 				await (ListAsync(criteria, results, cancellationToken)).ConfigureAwait(false);
+#pragma warning restore CS0618 // Type or member is obsolete
 				return results;
 			}
 		}
 
+		//Since 5.3
+		[Obsolete("Please use the generic overload yielding a list instead.")]
 		public abstract Task ListAsync(CriteriaImpl criteria, IList results, CancellationToken cancellationToken);
 
+		//Since 5.3
+		[Obsolete("Please use the generic overload instead.")]
 		public virtual async Task<IList> ListAsync(CriteriaImpl criteria, CancellationToken cancellationToken)
 		{
 			cancellationToken.ThrowIfCancellationRequested();
-			using (BeginProcess())
-			{
-				var results = new List<object>();
-				await (ListAsync(criteria, results, cancellationToken)).ConfigureAwait(false);
-				return results;
-			}
+			return (await (ListAsync<object>(criteria, cancellationToken)).ConfigureAwait(false)).ToIList();
 		}
 
 		public abstract Task<IList> ListFilterAsync(object collection, string filter, QueryParameters parameters, CancellationToken cancellationToken);

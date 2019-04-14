@@ -40,7 +40,7 @@ namespace NHibernate.Test.NHSpecificTest.NH3570
 				using (s.BeginTransaction())
 				{
 					Assert.That((await (s.GetAsync<UniParent>(id))).Children.Count, Is.EqualTo(1));
-					Assert.That((await (s.CreateCriteria<UniChild>().ListAsync())).Count, Is.EqualTo(1));
+					Assert.That((await (s.CreateCriteria<UniChild>().ListAsync<UniChild>())).Count, Is.EqualTo(1));
 				}
 			}
 		}

@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using NHibernate.DomainModel;
 using NUnit.Framework;
 
@@ -96,7 +95,7 @@ namespace NHibernate.Test.Legacy
 
 			// verify there is no other Simple objects in the db
 			ISession s4 = OpenSession();
-			Assert.AreEqual(0, s4.CreateCriteria(typeof(Simple)).List().Count);
+			Assert.AreEqual(0, s4.CreateCriteria(typeof(Simple)).List<Simple>().Count);
 			s4.Close();
 		}
 

@@ -86,12 +86,12 @@ namespace NHibernate.Test.Unionsubclass
 			s.Flush();
 			s.Clear();
 
-			IList list =
-				s.CreateCriteria(typeof(Human)).Fetch("location").Fetch("location.beings").List();
+			var list =
+				s.CreateCriteria(typeof(Human)).Fetch("location").Fetch("location.beings").List<Human>();
 
 			for (int i = 0; i < list.Count; i++)
 			{
-				Human h = (Human)list[i];
+				Human h = list[i];
 				Assert.IsTrue(NHibernateUtil.IsInitialized(h.Location));
 				Assert.IsTrue(NHibernateUtil.IsInitialized(h.Location.Beings));
 				s.Delete(h);
@@ -167,7 +167,7 @@ namespace NHibernate.Test.Unionsubclass
 
 			s.Clear();
 
-			x23y4 = (Alien)s.CreateCriteria(typeof(Alien)).AddOrder(Order.Asc("identity")).List()[0];
+			x23y4 = s.CreateCriteria(typeof(Alien)).AddOrder(Order.Asc("identity")).List<Alien>()[0];
 			s.Delete(x23y4.Hive);
 			s.Delete(s.Get<Location>(mel.Id));
 			s.Delete(s.Get<Location>(mars.Id));

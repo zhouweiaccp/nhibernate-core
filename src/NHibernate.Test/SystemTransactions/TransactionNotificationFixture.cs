@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Transactions;
 using NHibernate.Cfg;
 using NUnit.Framework;
@@ -93,13 +92,13 @@ namespace NHibernate.Test.SystemTransactions
 			{
 				using (var scope = new TransactionScope())
 				{
-					session.CreateCriteria<object>().List();
+					session.CreateCriteria<object>().List<object>();
 					scope.Complete();
 				}
 
 				using (var scope = new TransactionScope())
 				{
-					session.CreateCriteria<object>().List();
+					session.CreateCriteria<object>().List<object>();
 					scope.Complete();
 				}
 			}
@@ -116,7 +115,7 @@ namespace NHibernate.Test.SystemTransactions
 			{
 				using (var scope = new TransactionScope())
 				{
-					session.CreateCriteria<object>().List();
+					session.CreateCriteria<object>().List<object>();
 					scope.Complete();
 				}
 			}
@@ -144,8 +143,8 @@ namespace NHibernate.Test.SystemTransactions
 					s1 = OpenSession(interceptor);
 					s2 = OpenSession(interceptor);
 
-					s1.CreateCriteria<object>().List();
-					s2.CreateCriteria<object>().List();
+					s1.CreateCriteria<object>().List<object>();
+					s2.CreateCriteria<object>().List<object>();
 				}
 				finally
 				{
@@ -184,7 +183,7 @@ namespace NHibernate.Test.SystemTransactions
 				{
 					using (s1 = Sfi.WithOptions().Connection(ownConnection1).Interceptor(interceptor).OpenSession())
 					{
-						s1.CreateCriteria<object>().List();
+						s1.CreateCriteria<object>().List<object>();
 					}
 
 					if (doCommit)

@@ -389,14 +389,14 @@ namespace NHibernate.Test.Legacy
 			await (s.CreateCriteria(typeof(Baz))
 				.CreateCriteria("TopFoos")
 				.Add(Expression.IsNotNull("id"))
-				.ListAsync());
+				.ListAsync<Baz>());
 
 			await (s.CreateCriteria(typeof(Baz))
 				.CreateCriteria("Foo")
 				.CreateCriteria("Component.Glarch")
 				.CreateCriteria("ProxySet")
 				.Add(Expression.IsNotNull("id"))
-				.ListAsync());
+				.ListAsync<Baz>());
 
 			s.Close();
 		}
@@ -1424,10 +1424,10 @@ namespace NHibernate.Test.Legacy
 
 			s = OpenSession();
 			t = s.BeginTransaction();
-			IList result = await (s.CreateCriteria(typeof(Baz))
+			var result = await (s.CreateCriteria(typeof(Baz))
 				.AddOrder(Order.Asc("Name"))
-				.ListAsync());
-			b = (Baz) result[0];
+				.ListAsync<Baz>());
+			b = result[0];
 			Assert.IsTrue(b.Sortablez.Count == 3);
 
 			// compare the first item in the "Set" sortablez - can't reference
@@ -1446,8 +1446,8 @@ namespace NHibernate.Test.Legacy
 			s = OpenSession();
 			t = s.BeginTransaction();
 			result = await (s.CreateQuery("from Baz baz left join fetch baz.Sortablez order by baz.Name asc")
-				.ListAsync());
-			b = (Baz) result[0];
+				.ListAsync<Baz>());
+			b = result[0];
 			Assert.IsTrue(b.Sortablez.Count == 3);
 			foreach (Sortable sortable in b.Sortablez)
 			{
@@ -1461,8 +1461,8 @@ namespace NHibernate.Test.Legacy
 			s = OpenSession();
 			t = s.BeginTransaction();
 			result = await (s.CreateQuery("from Baz baz order by baz.Name asc")
-				.ListAsync());
-			b = (Baz) result[0];
+				.ListAsync<Baz>());
+			b = result[0];
 			Assert.IsTrue(b.Sortablez.Count == 3);
 			foreach (Sortable sortable in b.Sortablez)
 			{
@@ -2053,14 +2053,14 @@ namespace NHibernate.Test.Legacy
 			await (s.SaveAsync(f));
 			await (s.FlushAsync());
 
-			IList list = await (s.CreateCriteria(typeof(Foo))
+			var list = await (s.CreateCriteria(typeof(Foo))
 				.Add(Expression.Eq("Integer", f.Integer))
 				.Add(Expression.EqProperty("Integer", "Integer"))
 				.Add(Expression.Like("String", f.String))
 				.Add(Expression.In("Boolean", new bool[] {f.Boolean, f.Boolean}))
 				.Fetch("TheFoo")
 				.Fetch(SelectMode.Skip, "Baz")
-				.ListAsync());
+				.ListAsync<Foo>());
 
 			Assert.IsTrue(list.Count == 1 && list[0] == f);
 
@@ -2071,7 +2071,7 @@ namespace NHibernate.Test.Legacy
 					.Add(Expression.Eq("Boolean", f.Boolean))
 				)
 				.Add(Expression.IsNotNull("Boolean"))
-				.ListAsync());
+				.ListAsync<Foo>());
 
 			Assert.IsTrue(list.Count == 1 && list[0] == f);
 
@@ -2085,7 +2085,7 @@ namespace NHibernate.Test.Legacy
 
 			list = await (s.CreateCriteria(typeof(Foo))
 				.Add(orExpression)
-				.ListAsync());
+				.ListAsync<Foo>());
 
 			Assert.IsTrue(list.Count == 1 && list[0] == f);
 
@@ -2093,18 +2093,18 @@ namespace NHibernate.Test.Legacy
 			list = await (s.CreateCriteria(typeof(Foo))
 				.SetMaxResults(5)
 				.AddOrder(Order.Asc("Date"))
-				.ListAsync());
+				.ListAsync<Foo>());
 
 			Assert.IsTrue(list.Count == 1 && list[0] == f);
 
-			list = await (s.CreateCriteria(typeof(Foo)).SetMaxResults(0).ListAsync());
+			list = await (s.CreateCriteria(typeof(Foo)).SetMaxResults(0).ListAsync<Foo>());
 			Assert.AreEqual(0, list.Count);
 
 			list = await (s.CreateCriteria(typeof(Foo))
 				.SetFirstResult(1)
 				.AddOrder(Order.Asc("Date"))
 				.AddOrder(Order.Desc("String"))
-				.ListAsync());
+				.ListAsync<Foo>());
 
 			Assert.AreEqual(0, list.Count);
 
@@ -2124,9 +2124,9 @@ namespace NHibernate.Test.Legacy
 				.Fetch(SelectMode.Skip, "Component.Glarch")
 				.Fetch(SelectMode.Skip, "TheFoo.Baz")
 				.Fetch(SelectMode.Skip, "TheFoo.Component.Glarch")
-				.ListAsync());
+				.ListAsync<Foo>());
 
-			f = (Foo) list[0];
+			f = list[0];
 			Assert.IsTrue(NHibernateUtil.IsInitialized(f.TheFoo));
 
 			Assert.IsFalse(NHibernateUtil.IsInitialized(f.Component.Glarch));

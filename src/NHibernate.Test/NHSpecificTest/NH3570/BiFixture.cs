@@ -29,7 +29,7 @@ namespace NHibernate.Test.NHSpecificTest.NH3570
 				using (s.BeginTransaction())
 				{
 					Assert.That(s.Get<BiParent>(id).Children.Count, Is.EqualTo(1));
-					Assert.That(s.CreateCriteria<BiChild>().List().Count, Is.EqualTo(1));
+					Assert.That(s.CreateCriteria<BiChild>().List<BiChild>().Count, Is.EqualTo(1));
 				}
 			}
 		}

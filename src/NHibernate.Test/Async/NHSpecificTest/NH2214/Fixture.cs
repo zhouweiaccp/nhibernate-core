@@ -66,7 +66,7 @@ namespace NHibernate.Test.NHSpecificTest.NH2214
 					.AddOrder(Order.Asc("Name"));
 
 				var query = criteria.GetExecutableCriteria(session);
-				var result = await (query.ListAsync());
+				var result = await (query.ListAsync<string>());
 
 				Assert.That(result[0], Is.EqualTo("Name2"));
 				Assert.That(result[1], Is.EqualTo("Name3"));
@@ -90,7 +90,7 @@ namespace NHibernate.Test.NHSpecificTest.NH2214
 
 				var query = criteria.GetExecutableCriteria(session);
 
-				Assert.ThrowsAsync<HibernateException>(() => query.ListAsync());
+				Assert.ThrowsAsync<HibernateException>(() => query.ListAsync<string>());
 			}
 		}
 

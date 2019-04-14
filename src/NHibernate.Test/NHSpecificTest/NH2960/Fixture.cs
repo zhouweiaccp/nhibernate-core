@@ -54,7 +54,7 @@ namespace NHibernate.Test.NHSpecificTest.NH2960
 			{
 				var result = session
 					.CreateCriteria("BarCode")
-					.List();
+					.List<Entity>();
 				Assert.AreEqual(1, result.Count);
 			}
 		}
@@ -80,7 +80,7 @@ namespace NHibernate.Test.NHSpecificTest.NH2960
 			{
 				var result = session
 					.CreateCriteria(typeof(Entity))
-					.List();
+					.List<Entity>();
 				Assert.AreEqual(2, result.Count);
 			}
 		}

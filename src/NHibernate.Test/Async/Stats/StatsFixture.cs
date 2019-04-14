@@ -238,7 +238,7 @@ namespace NHibernate.Test.Stats
 			stats.Clear();
 			using (ISession s = OpenSession())
 			{
-				var r = await (s.CreateCriteria<Country>().ListAsync());
+				var r = await (s.CreateCriteria<Country>().ListAsync<Country>());
 			}
 			Assert.AreEqual(1, stats.QueryExecutionCount);
 

@@ -104,9 +104,9 @@ namespace NHibernate.Test.CompositeId
 				theClass2 = (ClassWithCompositeId) s2.Load(typeof(ClassWithCompositeId), id);
 				Assert.AreEqual(id, theClass2.Id);
 
-				IList results2 = s2.CreateCriteria(typeof(ClassWithCompositeId))
+				var results2 = s2.CreateCriteria(typeof(ClassWithCompositeId))
 				                   .Add(Expression.Eq("Id", secondId))
-				                   .List();
+				                   .List<ClassWithCompositeId>();
 
 				Assert.AreEqual(1, results2.Count);
 				theSecondClass2 = (ClassWithCompositeId) results2[0];
@@ -163,9 +163,9 @@ namespace NHibernate.Test.CompositeId
 					// I expect this to be thrown because the object no longer exists...
 				}
 
-				IList results = s4.CreateCriteria(typeof(ClassWithCompositeId))
+				var results = s4.CreateCriteria(typeof(ClassWithCompositeId))
 				                  .Add(Expression.Eq("Id", secondId))
-				                  .List();
+				                  .List<ClassWithCompositeId>();
 
 				Assert.AreEqual(0, results.Count);
 			}
@@ -192,7 +192,7 @@ namespace NHibernate.Test.CompositeId
 				c.Add(Expression.Eq("Id", id));
 
 				// right now just want to see if the Criteria is valid
-				IList results = c.List();
+				var results = c.List<ClassWithCompositeId>();
 
 				Assert.AreEqual(1, results.Count);
 			}

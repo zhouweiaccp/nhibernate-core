@@ -24,7 +24,7 @@ namespace NHibernate.Test.NHSpecificTest.NH1250
 			{
 				s.CreateCriteria(typeof(Party))
 					.SetMaxResults(10)
-					.List();
+					.List<Party>();
 				tx.Commit();
 			}
 		}

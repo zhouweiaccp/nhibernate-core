@@ -54,7 +54,7 @@ namespace NHibernate.Impl
 		public async Task<object> UniqueResultAsync(CancellationToken cancellationToken = default(CancellationToken))
 		{
 			cancellationToken.ThrowIfCancellationRequested();
-			return UniqueElement(await (ListAsync(cancellationToken)).ConfigureAwait(false));
+			return UniqueElement(await (ListAsync<object>(cancellationToken)).ConfigureAwait(false));
 		}
 
 		#endregion

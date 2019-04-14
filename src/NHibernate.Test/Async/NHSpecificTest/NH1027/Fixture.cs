@@ -37,7 +37,7 @@ namespace NHibernate.Test.NHSpecificTest.NH1027
 				criteria.CreateCriteria("Containers", "c", JoinType.LeftOuterJoin)
 				 .Add(Expression.Eq("c.Id", 15));
 				criteria.SetMaxResults(2);
-				await (criteria.ListAsync());
+				await (criteria.ListAsync<Item>());
 			}
 		}
 	}

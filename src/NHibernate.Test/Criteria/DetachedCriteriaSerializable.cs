@@ -21,7 +21,7 @@ namespace NHibernate.Test.Criteria
 			get { return new string[] { "Criteria.Enrolment.hbm.xml" }; }
 		}
 
-		private void SerializeAndList(DetachedCriteria dc)
+		private void SerializeAndList<T>(DetachedCriteria dc)
 		{
 			byte[] bytes = SerializationHelper.Serialize(dc);
 
@@ -29,7 +29,7 @@ namespace NHibernate.Test.Criteria
 
 			using (ISession s = OpenSession())
 			{
-				dcs.GetExecutableCriteria(s).List();
+				dcs.GetExecutableCriteria(s).List<T>();
 			}
 		}
 
@@ -56,7 +56,7 @@ namespace NHibernate.Test.Criteria
 		{
 			DetachedCriteria dc = DetachedCriteria.For(typeof(Student))
 				.Add(Expression.Eq("Name", "Gavin King"));
-			SerializeAndList(dc);
+			SerializeAndList<Student>(dc);
 		}
 
 		[Test]
@@ -337,7 +337,7 @@ namespace NHibernate.Test.Criteria
 				.AddOrder(Order.Asc("StudentNumber"))
 				.SetProjection(Property.ForName("StudentNumber"));
 
-			SerializeAndList(dc);
+			SerializeAndList<long>(dc);
 
 			// Like match modes
 			dc = DetachedCriteria.For(typeof(Student))
@@ -346,7 +346,7 @@ namespace NHibernate.Test.Criteria
 				.Add(Expression.Like("Name", "Gavin", MatchMode.Exact))
 				.Add(Expression.Like("Name", "Gavin", MatchMode.Start));
 
-			SerializeAndList(dc);
+			SerializeAndList<Student>(dc);
 
 			// Logical Expression
 			dc = DetachedCriteria.For(typeof(Student))
@@ -355,7 +355,7 @@ namespace NHibernate.Test.Criteria
 				Expression.And(Expression.Gt("StudentNumber", 1L),
 										  Expression.Lt("StudentNumber", 10L)));
 
-			SerializeAndList(dc);
+			SerializeAndList<Student>(dc);
 
 			// Projections
 			dc = DetachedCriteria.For(typeof(Enrolment))
@@ -363,13 +363,13 @@ namespace NHibernate.Test.Criteria
 														.Add(Projections.Property("StudentNumber"), "stNumber")
 														.Add(Projections.Property("CourseCode"), "cCode")))
 				.Add(Expression.Lt("StudentNumber", 668L));
-			SerializeAndList(dc);
+			SerializeAndList<object[]>(dc);
 
 			if (TestDialect.SupportsCountDistinct)
 			{
 				dc = DetachedCriteria.For(typeof(Enrolment))
 					.SetProjection(Projections.Count("StudentNumber").SetDistinct());
-				SerializeAndList(dc);
+				SerializeAndList<int>(dc);
 			}
 
 			dc = DetachedCriteria.For(typeof(Enrolment))
@@ -378,7 +378,7 @@ namespace NHibernate.Test.Criteria
 								.Add(Projections.Max("StudentNumber"))
 								.Add(Projections.Min("StudentNumber"))
 								.Add(Projections.Avg("StudentNumber")));
-			SerializeAndList(dc);
+			SerializeAndList<object[]>(dc);
 
 			// Junctions
 			dc = DetachedCriteria.For(typeof(Student))
@@ -388,28 +388,31 @@ namespace NHibernate.Test.Criteria
 				.Add(Expression.Disjunction()
 						.Add(Expression.Eq("Name", "Ralph"))
 						.Add(Expression.Eq("Name", "Gavin")));
-			SerializeAndList(dc);
+			SerializeAndList<Student>(dc);
 
 			// Subquery
-			dc = DetachedCriteria.For(typeof(Student))
-				.Add(Property.ForName("StudentNumber").Eq(232L))
-				.SetProjection(Property.ForName("Name"));
+			if (TestDialect.SupportsOperatorAll)
+			{
+				dc = DetachedCriteria.For(typeof(Student))
+				  .Add(Property.ForName("StudentNumber").Eq(232L))
+				  .SetProjection(Property.ForName("Name"));
 
-			DetachedCriteria dcs = DetachedCriteria.For(typeof(Student))
-				.Add(Subqueries.PropertyEqAll("Name", dc));
-			SerializeAndList(dc);
+				DetachedCriteria dcs = DetachedCriteria.For(typeof(Student))
+					.Add(Subqueries.PropertyEqAll("Name", dc));
+				SerializeAndList<Student>(dcs);
+			}
 
 			// SQLCriterion
 			dc = DetachedCriteria.For(typeof(Student))
 				.Add(Expression.Sql("{alias}.Name = 'Gavin'"));
-			SerializeAndList(dc);
+			SerializeAndList<Student>(dc);
 
 			// SQLProjection
 			dc = DetachedCriteria.For(typeof(Enrolment))
 				.SetProjection(Projections.SqlProjection("1 as constOne, count(*) as countStar",
 														 new String[] { "constOne", "countStar" },
 														 new IType[] { NHibernateUtil.Int32, NHibernateUtil.Int32 }));
-			SerializeAndList(dc);
+			SerializeAndList<object[]>(dc);
 
 			dc = DetachedCriteria.For(typeof(Student))
 				.SetProjection(
@@ -417,7 +420,7 @@ namespace NHibernate.Test.Criteria
 											   "{alias}.preferredCourseCode",
 											   new string[] { "studentsOfCourse", "CourseCode" },
 											   new IType[] { NHibernateUtil.Int32, NHibernateUtil.Int32 }));
-			SerializeAndList(dc);
+			SerializeAndList<object[]>(dc);
 
 			// Result transformers
 			dc = DetachedCriteria.For(typeof(Enrolment))
@@ -429,7 +432,7 @@ namespace NHibernate.Test.Criteria
 				)
 				.AddOrder(Order.Desc("studentName"))
 				.SetResultTransformer(Transformers.AliasToBean(typeof(StudentDTO)));
-			SerializeAndList(dc);
+			SerializeAndList<StudentDTO>(dc);
 		}
 	}
 }

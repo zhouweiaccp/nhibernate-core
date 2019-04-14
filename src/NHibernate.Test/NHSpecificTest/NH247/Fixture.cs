@@ -93,23 +93,23 @@ namespace NHibernate.Test.NHSpecificTest.NH247
 				ICriteria c;
 				c = s.CreateCriteria(typeof(LiteralDescription));
 				c.Add(new InsensitiveLikeExpression("Description", "DeScripTion%"));
-				Assert.AreEqual(2, c.List().Count);
+				Assert.AreEqual(2, c.List<LiteralDescription>().Count);
 
 				c = s.CreateCriteria(typeof(LiteralDescription));
 				c.Add(Expression.InsensitiveLike("Description", "DeScripTion", MatchMode.Start));
-				Assert.AreEqual(2, c.List().Count);
+				Assert.AreEqual(2, c.List<LiteralDescription>().Count);
 
 				c = s.CreateCriteria(typeof(LiteralDescription));
 				c.Add(Expression.InsensitiveLike("Description", "DeScripTion", MatchMode.Anywhere));
-				Assert.AreEqual(4, c.List().Count);
+				Assert.AreEqual(4, c.List<LiteralDescription>().Count);
 
 				c = s.CreateCriteria(typeof(LiteralDescription));
 				c.Add(Expression.InsensitiveLike("Description", "tHeeND", MatchMode.End));
-				Assert.AreEqual(1, c.List().Count);
+				Assert.AreEqual(1, c.List<LiteralDescription>().Count);
 
 				c = s.CreateCriteria(typeof(LiteralDescription));
 				c.Add(Expression.InsensitiveLike("Description", "DescRiptioN TheEnd", MatchMode.Exact));
-				Assert.AreEqual(1, c.List().Count);
+				Assert.AreEqual(1, c.List<LiteralDescription>().Count);
 			}
 		}
 	}

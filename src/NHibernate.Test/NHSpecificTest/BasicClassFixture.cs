@@ -1,11 +1,9 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using NHibernate.Criterion;
 using NHibernate.DomainModel.NHSpecific;
-using NHibernate.Linq;
 using NUnit.Framework;
 
 namespace NHibernate.Test.NHSpecificTest
@@ -938,9 +936,9 @@ namespace NHibernate.Test.NHSpecificTest
 				Assert.IsNotNull(onfe); //getting ride of 'onfe' is never used compile warning
 			}
 
-			IList results = s.CreateCriteria(typeof(BasicClass))
+			var results = s.CreateCriteria(typeof(BasicClass))
 				.Add(Expression.Eq("Id", id))
-				.List();
+				.List<BasicClass>();
 
 			Assert.AreEqual(0, results.Count);
 

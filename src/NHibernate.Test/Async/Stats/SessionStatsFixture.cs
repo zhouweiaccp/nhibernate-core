@@ -58,20 +58,20 @@ namespace NHibernate.Test.Stats
 
 			using(ISession s = OpenSession())
 			{
-				IList list = await (s.CreateCriteria(typeof (Country))
+				var list = await (s.CreateCriteria(typeof (Country))
 					.Add(Restrictions.Eq("Name", "Narnia"))
 					.SetCacheable(true)
-					.ListAsync());
+					.ListAsync<Country>());
 
 				Assert.AreEqual(0, list.Count);
 			}
 
 			using (ISession s = OpenSession())
 			{
-				IList list = await (s.CreateCriteria(typeof(Country))
+				var list = await (s.CreateCriteria(typeof(Country))
 					.Add(Restrictions.Eq("Name", "Narnia"))
 					.SetCacheable(true)
-					.ListAsync());
+					.ListAsync<Country>());
 
 				Assert.AreEqual(0, list.Count);
 			}

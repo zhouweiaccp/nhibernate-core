@@ -8,8 +8,6 @@
 //------------------------------------------------------------------------------
 
 
-using System;
-using System.Collections;
 using NHibernate.Dialect;
 using NUnit.Framework;
 
@@ -65,19 +63,16 @@ namespace NHibernate.Test.NHSpecificTest.NH623
 		[Test]
 		public async Task WhereAttributesOnBagsAsync()
 		{
-			IList result;
-			Document d;
-
-			result = await (session.CreateCriteria(typeof(Document)).ListAsync());
-			d = result[0] as Document;
+			var result = await (session.CreateCriteria(typeof(Document)).ListAsync<Document>());
+			var d = result[0];
 
 			// collection is lazy loaded an so it is also filtered so we will get here one element
 			Assert.AreEqual(1, d.Pages.Count);
 
 			session.Clear();
 
-			result = await (session.CreateCriteria(typeof(Document)).Fetch("Pages").ListAsync());
-			d = result[0] as Document;
+			result = await (session.CreateCriteria(typeof(Document)).Fetch("Pages").ListAsync<Document>());
+			d = result[0];
 
 			// this assertion fails because if the collection is eager fetched it will contain all elements and will ignore the where clause.
 			Assert.AreEqual(1, d.Pages.Count);

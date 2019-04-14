@@ -46,20 +46,20 @@ namespace NHibernate.Test.Stats
 
 			using(ISession s = OpenSession())
 			{
-				IList list = s.CreateCriteria(typeof (Country))
+				var list = s.CreateCriteria(typeof (Country))
 					.Add(Restrictions.Eq("Name", "Narnia"))
 					.SetCacheable(true)
-					.List();
+					.List<Country>();
 
 				Assert.AreEqual(0, list.Count);
 			}
 
 			using (ISession s = OpenSession())
 			{
-				IList list = s.CreateCriteria(typeof(Country))
+				var list = s.CreateCriteria(typeof(Country))
 					.Add(Restrictions.Eq("Name", "Narnia"))
 					.SetCacheable(true)
-					.List();
+					.List<Country>();
 
 				Assert.AreEqual(0, list.Count);
 			}

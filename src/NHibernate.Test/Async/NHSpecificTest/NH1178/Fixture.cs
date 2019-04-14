@@ -8,7 +8,6 @@
 //------------------------------------------------------------------------------
 
 
-using System.Collections;
 using NHibernate.Criterion;
 using NUnit.Framework;
 
@@ -64,14 +63,14 @@ namespace NHibernate.Test.NHSpecificTest.NH1178
 			using (ISession s = OpenSession())
 			{
 				Example example = Example.Create(new Foo(1000, "mono")).ExcludeZeroes().ExcludeNulls();
-				IList results = await (s.CreateCriteria(typeof (Foo)).Add(example).ListAsync());
+				var results = await (s.CreateCriteria(typeof (Foo)).Add(example).ListAsync<Foo>());
 				Assert.AreEqual(1, results.Count);
 			}
 
 			using (ISession s = OpenSession())
 			{
 				Example example = Example.Create(new Foo(1000, "mono")).ExcludeNulls().ExcludeZeroes();
-				IList results = await (s.CreateCriteria(typeof (Foo)).Add(example).ListAsync());
+				var results = await (s.CreateCriteria(typeof (Foo)).Add(example).ListAsync<Foo>());
 				Assert.AreEqual(1, results.Count);
 			}
 		}

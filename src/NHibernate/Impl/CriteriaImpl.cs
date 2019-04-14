@@ -267,31 +267,31 @@ namespace NHibernate.Impl
 			return this;
 		}
 
+		//Since 5.3
+		[Obsolete("Please use the generic overload instead.")]
 		public IList List()
 		{
-			var results = new List<object>();
-			List(results);
-			return results;
+			return List<object>().ToIList();
 		}
 
+		//Since 5.3
+		[Obsolete("Please use the generic overload yielding a list instead.")]
 		public void List(IList results)
+		{
+			ArrayHelper.AddAll(results, List());
+		}
+
+		public IList<T> List<T>()
 		{
 			Before();
 			try
 			{
-				session.List(this, results);
+				return session.List<T>(this);
 			}
 			finally
 			{
 				After();
 			}
-		}
-
-		public IList<T> List<T>()
-		{
-			List<T> results = new List<T>();
-			List(results);
-			return results;
 		}
 
 		public T UniqueResult<T>()
@@ -470,7 +470,7 @@ namespace NHibernate.Impl
 
 		public object UniqueResult()
 		{
-			return AbstractQueryImpl.UniqueElement(List());
+			return AbstractQueryImpl.UniqueElement(List<object>());
 		}
 
 		public ICriteria SetLockMode(LockMode lockMode)
@@ -842,6 +842,8 @@ namespace NHibernate.Impl
 				return this;
 			}
 
+			//Since 5.3
+			[Obsolete("Please use the generic overload instead.")]
 			public IList List()
 			{
 				return root.List();
@@ -857,6 +859,8 @@ namespace NHibernate.Impl
 				return root.Future<T>();
 			}
 
+			//Since 5.3
+			[Obsolete("Please use the generic overload yielding a list instead.")]
 			public void List(IList results)
 			{
 				root.List(results);

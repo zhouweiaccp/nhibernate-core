@@ -76,7 +76,7 @@ namespace NHibernate.Test.NHSpecificTest.SqlConverterAndMultiQuery
 			{
 				s.Connection.Close();
 				Assert.Throws<UnitTestException>(() =>
-												 s.CreateCriteria(typeof (ClassA)).List());
+												 s.CreateCriteria(typeof (ClassA)).List<ClassA>());
 			}
 		}
 

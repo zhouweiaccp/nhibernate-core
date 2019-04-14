@@ -1,4 +1,3 @@
-using System.Collections;
 using NHibernate.Criterion;
 using NHibernate.Dialect;
 using NUnit.Framework;
@@ -47,7 +46,7 @@ namespace NHibernate.Test.NHSpecificTest.NH1280
 			using (ISession s = OpenSession())
 			using (ITransaction tx = s.BeginTransaction())
 			{
-				IList list = s.CreateCriteria(typeof(Person))
+				var list = s.CreateCriteria(typeof(Person))
 					.SetProjection(
 						Projections.ProjectionList()
 							.Add(
@@ -62,10 +61,10 @@ namespace NHibernate.Test.NHSpecificTest.NH1280
 									Restrictions.IsNotNull(Projections.GroupProperty("Id")), new ConstantProjection("yes"), new ConstantProjection("No"))))
 					.Add(Restrictions.Eq(Projections.GroupProperty("Name"), "Fred"))
 					.Add(Restrictions.Gt("Id", 2))
-					.List();
+					.List<object[]>();
 
 				Assert.AreEqual(2, list.Count);
-				Assert.AreEqual("Fred Fred", ((object[])list[0])[0]);
+				Assert.AreEqual("Fred Fred", list[0][0]);
 				tx.Commit();
 			}
 		}
@@ -143,13 +142,13 @@ namespace NHibernate.Test.NHSpecificTest.NH1280
 			using (ISession s = OpenSession())
 			using (ITransaction tx = s.BeginTransaction())
 			{
-				IList list = s.CreateCriteria(typeof(Person))
+				var list = s.CreateCriteria(typeof(Person))
 					.Add(Restrictions.Not(Restrictions.Eq(Projections.Property("IQ"), 40)))
 					.Add(Restrictions.Eq(Projections.Property("Name"), "Fred"))
-					.List();
+					.List<Person>();
 
 				Assert.AreEqual(1, list.Count);
-				Assert.AreEqual("Fred", ((Person)list[0]).Name);
+				Assert.AreEqual("Fred", list[0].Name);
 				tx.Commit();
 			}
 		}
@@ -171,13 +170,13 @@ namespace NHibernate.Test.NHSpecificTest.NH1280
 					.Add(Property.ForName("ShoeSize").Eq(7))
 					.SetProjection(Projections.Property("Name"));
 
-				IList list = s.CreateCriteria(typeof(Person), "p")
+				var list = s.CreateCriteria(typeof(Person), "p")
 					.Add(Subqueries.PropertyEq("Name", dc1))
 					.Add(Restrictions.Not(Subqueries.Eq("Sally", dc2)))
-					.List();
+					.List<Person>();
 
 				Assert.AreEqual(1, list.Count);
-				Assert.AreEqual("Joe", ((Person)list[0]).Name);
+				Assert.AreEqual("Joe", list[0].Name);
 				tx.Commit();
 			}
 		}
@@ -205,9 +204,9 @@ namespace NHibernate.Test.NHSpecificTest.NH1280
 							new ConstantProjection(" "),
 							Projections.GroupProperty("Name")));
 
-				IList list = s.CreateCriteria(typeof(Person))
+				var list = s.CreateCriteria(typeof(Person))
 					.Add(Subqueries.Eq("Fred Fred", dc2))
-					.List();
+					.List<Person>();
 
 				Assert.AreEqual(5, list.Count); //yeah, it returns all five results. The key is that it didn't crash
 				tx.Commit();
@@ -224,7 +223,7 @@ namespace NHibernate.Test.NHSpecificTest.NH1280
 			using (ISession s = OpenSession())
 			using (ITransaction tx = s.BeginTransaction())
 			{
-				IList list = s.CreateCriteria(typeof(Person))
+				var list = s.CreateCriteria(typeof(Person))
 					.SetProjection(
 						new SqlFunctionProjection(
 							"LEFT",
@@ -239,7 +238,7 @@ namespace NHibernate.Test.NHSpecificTest.NH1280
 							new ConstantProjection(1),
 							new ConstantProjection(2)),
 						"Fr"))
-					.List();
+					.List<string>();
 
 				Assert.AreEqual(2, list.Count);
 				Assert.AreEqual("Fre", list[0]);

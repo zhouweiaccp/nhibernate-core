@@ -8,7 +8,6 @@
 //------------------------------------------------------------------------------
 
 
-using System.Collections;
 using System.Collections.Generic;
 using NHibernate.Criterion;
 using NUnit.Framework;
@@ -78,8 +77,8 @@ namespace NHibernate.Test.NHSpecificTest.NH1291AnonExample
 			{
 				using(ITransaction tx = s.BeginTransaction())
 				{
-					IList list = await (s.CreateCriteria(typeof(Person))
-						.Add(Example.Create(new PersonIQAnon(40))).ListAsync());
+					var list = await (s.CreateCriteria(typeof(Person))
+						.Add(Example.Create(new PersonIQAnon(40))).ListAsync<Person>());
 					//c# 3.5: Example.Create( new { IQ = 40 } )
 					Assert.AreEqual(1, list.Count);
 					Assert.AreEqual("Fred", ((Person)list[0]).Name);
@@ -111,8 +110,8 @@ namespace NHibernate.Test.NHSpecificTest.NH1291AnonExample
 			{
 				using(ITransaction tx = s.BeginTransaction())
 				{
-					IList list = await (s.CreateCriteria(typeof(Person))
-						.Add(Example.Create(new PersonNameAnon("%all%")).EnableLike()).ListAsync());
+					var list = await (s.CreateCriteria(typeof(Person))
+						.Add(Example.Create(new PersonNameAnon("%all%")).EnableLike()).ListAsync<Person>());
 					//c# 3.5: Example.Create( new { Name = "%all%" } )
 					Assert.AreEqual(1, list.Count);
 					Assert.AreEqual("Sally", ((Person)list[0]).Name);
@@ -136,11 +135,11 @@ namespace NHibernate.Test.NHSpecificTest.NH1291AnonExample
 					await (s.SaveAsync(h1));
 					await (s.SaveAsync(h2));
 
-					IList list = await (s.CreateCriteria(typeof(Person)).CreateCriteria("Home")
-						.Add(Example.Create(h1)).ListAsync());
+					var list = await (s.CreateCriteria(typeof(Person)).CreateCriteria("Home")
+						.Add(Example.Create(h1)).ListAsync<Person>());
 
 					Assert.AreEqual(1, list.Count);
-					Assert.AreEqual("Joe", ((Person)list[0]).Name);
+					Assert.AreEqual("Joe", list[0].Name);
 					await (tx.CommitAsync());
 				}
 			}
@@ -177,8 +176,8 @@ namespace NHibernate.Test.NHSpecificTest.NH1291AnonExample
 					await (s.SaveAsync(h1));
 					await (s.SaveAsync(h2));
 
-					IList list = await (s.CreateCriteria(typeof(Person))
-					    .CreateCriteria("Home").Add(Example.Create(new HomeAnon(97402))).ListAsync());
+					var list = await (s.CreateCriteria(typeof(Person))
+					    .CreateCriteria("Home").Add(Example.Create(new HomeAnon(97402))).ListAsync<Person>());
 					//c# 3.5: Example.Create( new { Zip = 97402 } )
 
 					Assert.AreEqual(1, list.Count);

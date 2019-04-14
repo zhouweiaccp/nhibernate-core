@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using NHibernate.Cfg;
 using NHibernate.Criterion;
@@ -69,11 +68,10 @@ namespace NHibernate.Test.NHSpecificTest.CriteriaQueryOnComponentCollection
 				            .CreateCriteria("ManagedEmployees")
 				            .Add(Restrictions.Eq("Position", "parent"))
 				            .SetResultTransformer(new RootEntityResultTransformer())
-				            .List();
+				            .List<Employee>();
 				Assert.That(list, Has.Count.EqualTo(1));
 				Assert.That(list[0], Is.Not.Null);
-				Assert.That(list[0], Is.TypeOf<Employee>());
-				Assert.That(((Employee) list[0]).Id, Is.EqualTo(1));
+				Assert.That(list[0].Id, Is.EqualTo(1));
 			}
 		}
 
@@ -86,11 +84,10 @@ namespace NHibernate.Test.NHSpecificTest.CriteriaQueryOnComponentCollection
 				            .CreateCriteria("Amounts")
 				            .Add(Restrictions.Gt("Amount", 5m))
 				            .SetResultTransformer(new RootEntityResultTransformer())
-				            .List();
+				            .List<Employee>();
 				Assert.That(list, Has.Count.EqualTo(1));
 				Assert.That(list[0], Is.Not.Null);
-				Assert.That(list[0], Is.TypeOf<Employee>());
-				Assert.That(((Employee) list[0]).Id, Is.EqualTo(1));
+				Assert.That(list[0].Id, Is.EqualTo(1));
 			}
 		}
 
@@ -105,11 +102,10 @@ namespace NHibernate.Test.NHSpecificTest.CriteriaQueryOnComponentCollection
 				            .CreateAlias("x.Amounts", "amount", joinType)
 				            .Add(Restrictions.Gt("amount.Amount", 5m))
 				            .SetResultTransformer(new RootEntityResultTransformer())
-				            .List();
+				            .List<Employee>();
 				Assert.That(list, Has.Count.EqualTo(1));
 				Assert.That(list[0], Is.Not.Null);
-				Assert.That(list[0], Is.TypeOf<Employee>());
-				Assert.That(((Employee) list[0]).Id, Is.EqualTo(1));
+				Assert.That(list[0].Id, Is.EqualTo(1));
 			}
 		}
 
@@ -125,11 +121,10 @@ namespace NHibernate.Test.NHSpecificTest.CriteriaQueryOnComponentCollection
 				                                                       .SetProjection(Projections.Id())
 				                                                       .CreateCriteria("Amounts")
 				                                                       .Add(Restrictions.Gt("Amount", 5m))))
-				            .List();
+				            .List<Employee>();
 				Assert.That(list, Has.Count.EqualTo(1));
 				Assert.That(list[0], Is.Not.Null);
-				Assert.That(list[0], Is.TypeOf<Employee>());
-				Assert.That(((Employee) list[0]).Id, Is.EqualTo(1));
+				Assert.That(list[0].Id, Is.EqualTo(1));
 			}
 		}
 
