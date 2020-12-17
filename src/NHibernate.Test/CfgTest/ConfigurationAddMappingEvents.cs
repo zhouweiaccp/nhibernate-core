@@ -39,6 +39,7 @@ namespace NHibernate.Test.CfgTest
 	</class>
 </hibernate-mapping>
 ";
+		
 		[Test]
 		public void WhenSubscribedToBeforeBindThenRaiseEventForEachMapping()
 		{
