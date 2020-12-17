@@ -22,6 +22,10 @@ Alternatively binaries are available from SourceForge at <http://sourceforge.net
 You are encouraged to review the release notes ([releasenotes.txt](releasenotes.txt)), particularly when upgrading to a 
 later version. The release notes will generally document any breaking changes.
 
+
+
+## link
+- [Generation_Database_by_NHibernate_and_CodeDOM](https://www.codeproject.com/KB/dotnet/891056/Generation_Database_by_NHibernate_and_CodeDOM.rar) nf4.5 mvc 生成代码
 Community Forums
 ----------------
 
