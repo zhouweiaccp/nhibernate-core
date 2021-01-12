@@ -41,7 +41,7 @@ namespace NHibernate.Test.CfgTest
 			});
 			var dialect = Dialect.Dialect.GetDialect(cfg.GetDerivedProperties());
 
-			cfg.AddDeserializedMapping()
+			//cfg.AddDeserializedMapping()
 			dialect.Keywords.Add("Abracadabra");
 			// 创建表结构
 			SchemaMetadataUpdater.QuoteTableAndColumns(cfg, dialect);
