@@ -25,44 +25,44 @@ namespace YJingLee.TryConfOrm
 
 		public static void ShowXmlMapping()
 		{
-			var document = CreateXmlMappings.Serialize(GetMapping());
-			File.WriteAllText("MyMapping.hbm.xml", document);
-			Console.Write(document);
+			//var document = CreateXmlMappings.Serialize(GetMapping());
+			//File.WriteAllText("MyMapping.hbm.xml", document);
+			//Console.Write(document);
 		}
 
 		public static void JustForConfOrm()
 		{
-			//配置NHibernate
-			var conf = NhConfig.ConfigureNHibernate();
-			//在Configuration中添加HbmMapping
-			conf.AddDeserializedMapping(GetMapping(), "Domain");
-			//配置数据库架构元数据
-			SchemaMetadataUpdater.QuoteTableAndColumns(conf);
-			//创建数据库架构
-			new SchemaExport(conf).Create(false, true);
-			//建立SessionFactory
-			var factory = conf.BuildSessionFactory();
-			//打开Session做持久化数据
-			using (var s = factory.OpenSession())
-			{
-				using (var tx = s.BeginTransaction())
-				{
-					var domain = new Domain { Name = "我的测试" };
-					s.Save(domain);
-					tx.Commit();
-				}
-			}
-			//打开Session做删除数据
-			using (var s = factory.OpenSession())
-			{
-				using (var tx = s.BeginTransaction())
-				{
-					s.CreateQuery("delete from Domain").ExecuteUpdate();
-					tx.Commit();
-				}
-			}
-			//删除数据库架构
-			new SchemaExport(conf).Drop(false, true);
+			////配置NHibernate
+			//var conf = NhConfig.ConfigureNHibernate();
+			////在Configuration中添加HbmMapping
+			//conf.AddDeserializedMapping(GetMapping(), "Domain");
+			////配置数据库架构元数据
+			//SchemaMetadataUpdater.QuoteTableAndColumns(conf);
+			////创建数据库架构
+			//new SchemaExport(conf).Create(false, true);
+			////建立SessionFactory
+			//var factory = conf.BuildSessionFactory();
+			////打开Session做持久化数据
+			//using (var s = factory.OpenSession())
+			//{
+			//	using (var tx = s.BeginTransaction())
+			//	{
+			//		var domain = new Domain { Name = "我的测试" };
+			//		s.Save(domain);
+			//		tx.Commit();
+			//	}
+			//}
+			////打开Session做删除数据
+			//using (var s = factory.OpenSession())
+			//{
+			//	using (var tx = s.BeginTransaction())
+			//	{
+			//		s.CreateQuery("delete from Domain").ExecuteUpdate();
+			//		tx.Commit();
+			//	}
+			//}
+			////删除数据库架构
+			//new SchemaExport(conf).Drop(false, true);
 		}
 
 		static void Main1(string[] args)

@@ -9,4 +9,12 @@
     <PackageReference Include="FluentNHibernate.Cfg.Db.CsharpSqlite" Version="1.0.4" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="model\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NHibernate.DomainModel\NHibernate.DomainModel.csproj" />
+  </ItemGroup>
+
 </Project>

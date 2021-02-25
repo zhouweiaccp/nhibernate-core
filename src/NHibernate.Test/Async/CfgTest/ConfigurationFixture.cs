@@ -65,42 +65,42 @@ namespace NHibernate.Test.CfgTest
 		/// Verify that setting the default assembly and namespace through
 		/// <see cref="Configuration" /> works as intended.
 		/// </summary>
-		[Test]
-		public async Task SetDefaultAssemblyAndNamespaceAsync()
-		{
-			string hbmFromDomainModel =
-				@"<?xml version='1.0' ?>
-<hibernate-mapping xmlns='urn:nhibernate-mapping-2.2'>
-	<class name='A'>
-		<id name='Id' column='somecolumn'>
-			<generator class='native' />
-		</id>
-	</class>
-</hibernate-mapping>";
+//		[Test]
+//		public async Task SetDefaultAssemblyAndNamespaceAsync()
+//		{
+//			string hbmFromDomainModel =
+//				@"<?xml version='1.0' ?>
+//<hibernate-mapping xmlns='urn:nhibernate-mapping-2.2'>
+//	<class name='A'>
+//		<id name='Id' column='somecolumn'>
+//			<generator class='native' />
+//		</id>
+//	</class>
+//</hibernate-mapping>";
 
-			string hbmFromTest =
-				@"<?xml version='1.0' ?>
-<hibernate-mapping xmlns='urn:nhibernate-mapping-2.2'>
-	<class name='LocatedInTestAssembly' lazy='false'>
-		<id name='Id' column='somecolumn'>
-			<generator class='native' />
-		</id>
-	</class>
-</hibernate-mapping>";
+//			string hbmFromTest =
+//				@"<?xml version='1.0' ?>
+//<hibernate-mapping xmlns='urn:nhibernate-mapping-2.2'>
+//	<class name='LocatedInTestAssembly' lazy='false'>
+//		<id name='Id' column='somecolumn'>
+//			<generator class='native' />
+//		</id>
+//	</class>
+//</hibernate-mapping>";
 
-			Configuration cfg = new Configuration();
-			cfg
-				.SetDefaultAssembly("NHibernate.DomainModel")
-				.SetDefaultNamespace("NHibernate.DomainModel")
-				.AddXmlString(hbmFromDomainModel);
+//			Configuration cfg = new Configuration();
+//			cfg
+//				.SetDefaultAssembly("NHibernate.DomainModel")
+//				.SetDefaultNamespace("NHibernate.DomainModel")
+//				.AddXmlString(hbmFromDomainModel);
 
-			cfg
-				.SetDefaultAssembly("NHibernate.Test")
-				.SetDefaultNamespace(typeof(LocatedInTestAssembly).Namespace)
-				.AddXmlString(hbmFromTest);
+//			cfg
+//				.SetDefaultAssembly("NHibernate.Test")
+//				.SetDefaultNamespace(typeof(LocatedInTestAssembly).Namespace)
+//				.AddXmlString(hbmFromTest);
 
-			await (cfg.BuildSessionFactory().CloseAsync());
-		}
+//			await (cfg.BuildSessionFactory().CloseAsync());
+//		}
 
 		public class SampleQueryProvider : DefaultQueryProvider
 		{
