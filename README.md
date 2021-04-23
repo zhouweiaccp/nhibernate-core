@@ -93,3 +93,27 @@ of NHibernate (in no particular order):
 [article]: http://www.codeproject.com/KB/recipes/sets.aspx
 [Relinq]: http://relinq.codeplex.com/
 [AsyncGenerator]: http://github.com/maca88/AsyncGenerator
+
+
+
+## 项目查询中，常常需要返回指定的字段，下面是三种Nhibernate的方法
+1.linq to Nhibernate
+public class NameID
+{
+public int Id { get; set; }
+public string Name { get; set; }
+}
+var discontinuedProducts = session
+.Query<Product>()
+.Where(p => p.Discontinued)
+.Select(p => new NameID { Id = p.Id, Name = p.Name });
+2.Nhibernate（3.0后支持）
+var productsLookup = session.QueryOver<Product>()
+.Select(p => p.Id, p => p.Name)
+.TransformUsing(Transformers.AliasToBean<NameID>())
+.List<NameID>();
+3.Nhibernate HQL
+var productsLookup = session
+.CreateQuery("select Id as Id, Name as Name from Product")
+.SetResultTransformer(Transformers.AliasToBean<NameID>())
+.List<NameID>();
